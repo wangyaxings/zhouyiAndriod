@@ -18,10 +18,12 @@ import kotlinx.coroutines.flow.first
  */
 class QuizService(context: Context) {
 
-    private val hexagramRepository = HexagramRepository(context)
-    private val attemptRepository = AttemptRepository(context)
-    private val wrongBookRepository = WrongBookRepository(context)
-    private val srsRepository = SrsRepository(context)
+    private val appContext: Context = context.applicationContext
+
+    private val hexagramRepository = HexagramRepository(appContext)
+    private val attemptRepository = AttemptRepository(appContext)
+    private val wrongBookRepository = WrongBookRepository(appContext)
+    private val srsRepository = SrsRepository(appContext)
 
     private val questionGenerator = QuestionGenerator()
     private val optionGenerator = OptionGenerator()
@@ -36,14 +38,13 @@ class QuizService(context: Context) {
     suspend fun initialize() {
         // 确保数据已初始化
         if (!hexagramRepository.isDataInitialized()) {
-            hexagramRepository.initializeData(context)
+            hexagramRepository.initializeData(appContext)
         }
 
         // 获取所有卦象
         allHexagrams = hexagramRepository.getAllHexagrams().first()
 
-        // 初始化题目生成器
-        questionGenerator.initializeDeck()
+        // 题目生成器在首次调用getNextQuestion时会自动洗牌
     }
 
     /**
@@ -59,12 +60,11 @@ class QuizService(context: Context) {
 
         val options = optionGenerator.generateOptions(
             correctHexagram = correctHexagram,
-            allHexagrams = allHexagrams,
-            recentOptions = recentOptions.takeLast(5)
+            allHexagrams = allHexagrams
         )
 
-        // 更新最近选项列表
-        recentOptions.addAll(options.map { it.text })
+        // 更新最近选项列表（记录名称避免重复）
+        recentOptions.addAll(options.map { it.nameZh })
         if (recentOptions.size > 10) {
             recentOptions.removeAt(0)
         }
@@ -72,7 +72,7 @@ class QuizService(context: Context) {
         return QuizQuestion(
             hexagram = correctHexagram,
             options = options,
-            roundInfo = questionGenerator.getCurrentRoundInfo()
+            roundInfo = null
         )
     }
 
@@ -81,10 +81,10 @@ class QuizService(context: Context) {
      */
     suspend fun submitAnswer(
         question: QuizQuestion,
-        selectedOption: OptionGenerator.Option,
+        selectedOption: Hexagram,
         mode: String = "practice"
     ): AnswerResult {
-        val isCorrect = selectedOption.isCorrect
+        val isCorrect = selectedOption.id == question.hexagram.id
         val timestamp = System.currentTimeMillis()
 
         // 创建答题记录
@@ -92,9 +92,9 @@ class QuizService(context: Context) {
             hexagramId = question.hexagram.id,
             timestamp = timestamp,
             isCorrect = isCorrect,
-            selectedOption = selectedOption.text,
-            correctOption = question.hexagram.getDisplayName(),
-            options = question.options.map { it.text },
+            selectedOption = selectedOption.id,
+            correctOption = question.hexagram.id,
+            options = question.options.map { it.id },
             mode = mode
         )
 
@@ -135,8 +135,7 @@ class QuizService(context: Context) {
 
         val options = optionGenerator.generateOptions(
             correctHexagram = wrongHexagram,
-            allHexagrams = allHexagrams,
-            recentOptions = emptyList()
+            allHexagrams = allHexagrams
         )
 
         return QuizQuestion(
@@ -161,8 +160,7 @@ class QuizService(context: Context) {
 
         val options = optionGenerator.generateOptions(
             correctHexagram = dueHexagram,
-            allHexagrams = allHexagrams,
-            recentOptions = emptyList()
+            allHexagrams = allHexagrams
         )
 
         return QuizQuestion(
@@ -180,10 +178,11 @@ class QuizService(context: Context) {
         val today = System.currentTimeMillis()
         val oneDayAgo = today - (24 * 60 * 60 * 1000)
 
-        val totalAttempts = attemptRepository.getTotalCountSince(oneDayAgo)
-        val correctAttempts = attemptRepository.getCorrectCountSince(oneDayAgo)
-        val accuracy = attemptRepository.getAccuracySince(oneDayAgo)
-        val studiedHexagrams = attemptRepository.getStudiedHexagramsSince(oneDayAgo).size
+        val attempts = attemptRepository.getAttemptsByTimeRange(oneDayAgo, today)
+        val totalAttempts = attempts.size
+        val correctAttempts = attempts.count { it.isCorrect }
+        val accuracy = if (totalAttempts > 0) correctAttempts.toFloat() / totalAttempts else 0f
+        val studiedHexagrams = attempts.map { it.hexagramId }.distinct().size
 
         return TodayStats(
             totalAttempts = totalAttempts,
@@ -198,7 +197,7 @@ class QuizService(context: Context) {
      */
     fun resetGenerators() {
         questionGenerator.reset()
-        optionGenerator.resetPositionPointer()
+        optionGenerator.reset()
         recentOptions.clear()
     }
 
@@ -207,8 +206,8 @@ class QuizService(context: Context) {
      */
     data class QuizQuestion(
         val hexagram: Hexagram,
-        val options: List<OptionGenerator.Option>,
-        val roundInfo: QuestionGenerator.RoundInfo?,
+        val options: List<Hexagram>,
+        val roundInfo: Any?,
         val isWrongQuestion: Boolean = false,
         val isReviewQuestion: Boolean = false
     )
@@ -219,7 +218,7 @@ class QuizService(context: Context) {
     data class AnswerResult(
         val isCorrect: Boolean,
         val correctHexagram: Hexagram,
-        val selectedOption: OptionGenerator.Option,
+        val selectedOption: Hexagram,
         val feedback: String
     )
 

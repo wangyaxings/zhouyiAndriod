@@ -62,12 +62,14 @@ fun StatisticsScreen(
                 }
             } else {
                 // 总体统计卡片
-                OverallStatsCard(
-                    stats = uiState.overallStats,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(bottom = 16.dp)
-                )
+                uiState.overallStats?.let { stats ->
+                    OverallStatsCard(
+                        stats = stats,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(bottom = 16.dp)
+                    )
+                }
 
                 // 学习进度卡片
                 if (uiState.learningProgress != null) {

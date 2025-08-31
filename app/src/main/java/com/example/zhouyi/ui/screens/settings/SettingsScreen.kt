@@ -56,13 +56,14 @@ fun SettingsScreen(
                 SettingsItem(
                     title = "每日目标",
                     subtitle = "${uiState.dailyGoal} 题",
-                    icon = Icons.Default.Target,
+                    icon = Icons.Default.Flag,
                     onClick = {
                         viewModel.showDailyGoalDialog()
                     }
                 )
 
                 // 强化模式
+                /* 强化模式 */
                 SettingsSwitch(
                     title = "强化模式",
                     subtitle = "优先复习错题",
@@ -207,9 +208,7 @@ fun SettingsScreen(
                 viewModel.setDailyGoal(goal)
                 viewModel.hideDailyGoalDialog()
             },
-            onDismiss = {
-                viewModel.hideDailyGoalDialog()
-            }
+            onDismiss = { viewModel.hideDailyGoalDialog() }
         )
     }
 
@@ -221,9 +220,7 @@ fun SettingsScreen(
                 viewModel.setFontSize(size)
                 viewModel.hideFontSizeDialog()
             },
-            onDismiss = {
-                viewModel.hideFontSizeDialog()
-            }
+            onDismiss = { viewModel.hideFontSizeDialog() }
         )
     }
 
@@ -234,9 +231,7 @@ fun SettingsScreen(
                 viewModel.resetLearningData()
                 viewModel.hideResetDataDialog()
             },
-            onDismiss = {
-                viewModel.hideResetDataDialog()
-            }
+            onDismiss = { viewModel.hideResetDataDialog() }
         )
     }
 
@@ -247,9 +242,7 @@ fun SettingsScreen(
                 viewModel.resetSettings()
                 viewModel.hideResetSettingsDialog()
             },
-            onDismiss = {
-                viewModel.hideResetSettingsDialog()
-            }
+            onDismiss = { viewModel.hideResetSettingsDialog() }
         )
     }
 }
@@ -397,4 +390,67 @@ private fun getFontSizeText(size: Int): String {
         3 -> "大"
         else -> "中"
     }
+}
+
+// 简单的设置对话框实现
+@Composable
+private fun DailyGoalDialog(
+    currentGoal: Int,
+    onConfirm: (Int) -> Unit,
+    onDismiss: () -> Unit
+) {
+    var goal by remember { mutableStateOf(currentGoal) }
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        confirmButton = {
+            TextButton(onClick = { onConfirm(goal) }) { Text("确定") }
+        },
+        dismissButton = { TextButton(onClick = onDismiss) { Text("取消") } },
+        title = { Text("设置每日目标") },
+        text = { Text("当前: $goal 题") }
+    )
+}
+
+@Composable
+private fun FontSizeDialog(
+    currentSize: Int,
+    onConfirm: (Int) -> Unit,
+    onDismiss: () -> Unit
+) {
+    var size by remember { mutableStateOf(currentSize) }
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        confirmButton = { TextButton(onClick = { onConfirm(size) }) { Text("确定") } },
+        dismissButton = { TextButton(onClick = onDismiss) { Text("取消") } },
+        title = { Text("设置字体大小") },
+        text = { Text("当前: ${getFontSizeText(size)}") }
+    )
+}
+
+@Composable
+private fun ResetDataDialog(
+    onConfirm: () -> Unit,
+    onDismiss: () -> Unit
+) {
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        confirmButton = { TextButton(onClick = onConfirm) { Text("清除") } },
+        dismissButton = { TextButton(onClick = onDismiss) { Text("取消") } },
+        title = { Text("重置学习数据") },
+        text = { Text("确认清除所有答题记录和进度？") }
+    )
+}
+
+@Composable
+private fun ResetSettingsDialog(
+    onConfirm: () -> Unit,
+    onDismiss: () -> Unit
+) {
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        confirmButton = { TextButton(onClick = onConfirm) { Text("重置") } },
+        dismissButton = { TextButton(onClick = onDismiss) { Text("取消") } },
+        title = { Text("恢复默认设置") },
+        text = { Text("确认恢复所有设置为默认值？") }
+    )
 }

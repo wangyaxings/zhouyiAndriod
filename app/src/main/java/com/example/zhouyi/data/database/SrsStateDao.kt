@@ -117,6 +117,12 @@ interface SrsStateDao {
      */
     @Query("SELECT COUNT(*) FROM srs_states")
     suspend fun getSrsStateCount(): Int
+
+    /**
+     * 获取指定盒子的SRS状态数量
+     */
+    @Query("SELECT COUNT(*) FROM srs_states WHERE bucket = :bucket")
+    suspend fun getSrsStateCountByBucket(bucket: Int): Int
 }
 
 /**

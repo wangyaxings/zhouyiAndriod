@@ -31,37 +31,45 @@ class StatisticsViewModel(
                 _uiState.value = _uiState.value.copy(isLoading = true)
 
                 // 并行加载各种统计数据
-                val overallStats = attemptRepository.getOverallStatistics().first()
-                val srsStats = srsRepository.getSrsStatistics().first()
-                val wrongStats = wrongBookRepository.getWrongBookStatistics().first()
+                val overall = attemptRepository.getOverallStatistics().first()
 
-                // 计算学习进度
-                val learningProgress = calculateLearningProgress(srsStats)
+                // SRS 统计
+                val bucketCounts = srsRepository.getSrsStatistics() // Map<Int, Int>
+                val totalItems = bucketCounts.values.sum()
+                val masteredItems = bucketCounts[5] ?: 0
+                val dueItems = srsRepository.getDueHexagramIds().size
 
-                // 计算时间统计
-                val timeStats = calculateTimeStats(overallStats)
+                // 学习进度
+                val learningProgress = calculateLearningProgress(totalItems, masteredItems, dueItems)
+
+                // 时间统计（根据答题记录简单统计）
+                val timeStats = calculateTimeStatsFromAttempts()
+
+                // 错题统计
+                val wrongBooks = wrongBookRepository.getAllWrongBook().first()
+                val wrongStats = WrongStats(
+                    totalWrong = wrongBooks.size,
+                    highFrequencyWrong = wrongBooks.count { it.wrongCount >= 3 },
+                    resolvedWrong = 0,
+                    mostWrongHexagram = wrongBooks.maxByOrNull { it.wrongCount }?.hexagramId?.toString(),
+                    mostWrongCount = wrongBooks.maxByOrNull { it.wrongCount }?.wrongCount ?: 0
+                )
 
                 _uiState.value = _uiState.value.copy(
                     overallStats = OverallStats(
-                        totalQuestions = overallStats.total,
-                        accuracy = overallStats.accuracy,
-                        studyDays = calculateStudyDays(overallStats)
+                        totalQuestions = overall.total,
+                        accuracy = overall.accuracy,
+                        studyDays = calculateStudyDays()
                     ),
                     learningProgress = learningProgress,
                     srsStats = SrsStats(
-                        totalItems = srsStats.totalItems,
-                        dueItems = srsStats.dueItems,
-                        masteredItems = srsStats.masteredItems,
-                        recommendation = srsStats.recommendation ?: ""
+                        totalItems = totalItems,
+                        dueItems = dueItems,
+                        masteredItems = masteredItems,
+                        recommendation = if (dueItems > 0) "今日有 $dueItems 项待复习" else "继续保持！"
                     ),
                     timeStats = timeStats,
-                    wrongStats = WrongStats(
-                        totalWrong = wrongStats.totalCount,
-                        highFrequencyWrong = wrongStats.highFrequencyCount,
-                        resolvedWrong = wrongStats.resolvedCount,
-                        mostWrongHexagram = wrongStats.mostWrongHexagram,
-                        mostWrongCount = wrongStats.mostWrongCount
-                    ),
+                    wrongStats = wrongStats,
                     isLoading = false
                 )
 
@@ -77,24 +85,14 @@ class StatisticsViewModel(
     /**
      * 计算学习进度
      */
-    private fun calculateLearningProgress(srsStats: com.example.zhouyi.data.database.SrsStatistics): LearningProgress {
-        val totalItems = srsStats.totalItems
-        if (totalItems == 0) {
-            return LearningProgress(0f, 0f, 0f, 0, 0, 0, 0)
-        }
-
-        val masteredCount = srsStats.masteredItems
-        val learningCount = srsStats.totalItems - srsStats.dueItems - masteredCount
-        val reviewCount = srsStats.dueItems
-
-        val masteredPercentage = (masteredCount * 100.0f / totalItems)
-        val learningPercentage = (learningCount * 100.0f / totalItems)
-        val reviewPercentage = (reviewCount * 100.0f / totalItems)
-
+    private fun calculateLearningProgress(totalItems: Int, masteredCount: Int, dueItems: Int): LearningProgress {
+        if (totalItems == 0) return LearningProgress(0f, 0f, 0f, 0, 0, 0, 0)
+        val learningCount = totalItems - dueItems - masteredCount
+        val reviewCount = dueItems
         return LearningProgress(
-            masteredPercentage = masteredPercentage,
-            learningPercentage = learningPercentage,
-            reviewPercentage = reviewPercentage,
+            masteredPercentage = (masteredCount * 100.0f / totalItems),
+            learningPercentage = (learningCount * 100.0f / totalItems),
+            reviewPercentage = (reviewCount * 100.0f / totalItems),
             masteredCount = masteredCount,
             learningCount = learningCount,
             reviewCount = reviewCount,
@@ -105,25 +103,43 @@ class StatisticsViewModel(
     /**
      * 计算时间统计
      */
-    private fun calculateTimeStats(overallStats: com.example.zhouyi.data.database.AttemptStatistics): TimeStats {
-        // 这里需要从答题记录中计算时间相关的统计
-        // 暂时使用模拟数据
+    private suspend fun getAttemptsInRange(start: Long, end: Long): Int {
+        val all = attemptRepository.getAllAttempts().first()
+        return all.count { it.timestamp in start until end }
+    }
+
+    private suspend fun calculateTimeStatsFromAttempts(): TimeStats {
+        val now = System.currentTimeMillis()
+        val day = 24L * 60 * 60 * 1000
+        val cal = java.util.Calendar.getInstance()
+
+        // today
+        val startOfDay = cal.apply {
+            set(java.util.Calendar.HOUR_OF_DAY, 0)
+            set(java.util.Calendar.MINUTE, 0)
+            set(java.util.Calendar.SECOND, 0)
+            set(java.util.Calendar.MILLISECOND, 0)
+        }.timeInMillis
+        val today = getAttemptsInRange(startOfDay, startOfDay + day)
+
+        // week (last 7 days)
+        val week = getAttemptsInRange(now - 7 * day, now)
+
+        // month (last 30 days)
+        val month = getAttemptsInRange(now - 30 * day, now)
+
         return TimeStats(
-            todayQuestions = overallStats.todayTotal ?: 0,
-            weekQuestions = overallStats.weekTotal ?: 0,
-            monthQuestions = overallStats.monthTotal ?: 0,
-            averageTimePerQuestion = 15.5 // 模拟平均答题时间
+            todayQuestions = today,
+            weekQuestions = week,
+            monthQuestions = month,
+            averageTimePerQuestion = 0.0
         )
     }
 
     /**
      * 计算学习天数
      */
-    private fun calculateStudyDays(overallStats: com.example.zhouyi.data.database.AttemptStatistics): Int {
-        // 这里需要从答题记录中计算实际的学习天数
-        // 暂时使用模拟数据
-        return 30 // 模拟学习30天
-    }
+    private fun calculateStudyDays(): Int = 0
 
     /**
      * 刷新数据

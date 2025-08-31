@@ -26,24 +26,23 @@ class SettingsViewModel(application: Application) : AndroidViewModel(application
     fun loadSettings() {
         viewModelScope.launch {
             try {
-                // 收集所有设置
                 appPreferences.dailyGoal.collect { dailyGoal ->
                     appPreferences.showNumber.collect { showNumber ->
                         appPreferences.autoNext.collect { autoNext ->
-                            appPreferences.vibration.collect { vibration ->
-                                appPreferences.sound.collect { sound ->
+                            appPreferences.vibrationEnabled.collect { vibrationEnabled ->
+                                appPreferences.soundEnabled.collect { soundEnabled ->
                                     appPreferences.darkTheme.collect { darkTheme ->
                                         appPreferences.fontSize.collect { fontSize ->
-                                            appPreferences.studyStreak.collect { studyStreak ->
+                                            appPreferences.reinforcementMode.collect { reinforcementMode ->
                                                 _uiState.value = _uiState.value.copy(
                                                     dailyGoal = dailyGoal,
                                                     showNumber = showNumber,
                                                     autoNext = autoNext,
-                                                    vibration = vibration,
-                                                    sound = sound,
+                                                    vibrationEnabled = vibrationEnabled,
+                                                    soundEnabled = soundEnabled,
                                                     darkTheme = darkTheme,
                                                     fontSize = fontSize,
-                                                    studyStreak = studyStreak
+                                                    reinforcementMode = reinforcementMode
                                                 )
                                             }
                                         }
@@ -97,10 +96,10 @@ class SettingsViewModel(application: Application) : AndroidViewModel(application
         }
     }
 
-    fun setVibration(enabled: Boolean) {
+    fun setVibrationEnabled(enabled: Boolean) {
         viewModelScope.launch {
             try {
-                appPreferences.setVibration(enabled)
+                appPreferences.setVibrationEnabled(enabled)
             } catch (e: Exception) {
                 _uiState.value = _uiState.value.copy(
                     error = e.message ?: "设置震动失败"
@@ -109,10 +108,10 @@ class SettingsViewModel(application: Application) : AndroidViewModel(application
         }
     }
 
-    fun setSound(enabled: Boolean) {
+    fun setSoundEnabled(enabled: Boolean) {
         viewModelScope.launch {
             try {
-                appPreferences.setSound(enabled)
+                appPreferences.setSoundEnabled(enabled)
             } catch (e: Exception) {
                 _uiState.value = _uiState.value.copy(
                     error = e.message ?: "设置音效失败"
@@ -146,13 +145,32 @@ class SettingsViewModel(application: Application) : AndroidViewModel(application
     }
 
     fun resetStudyStats() {
+        // 预留：如需清空学习统计，请在此处清理数据库中的 Attempts/SRS 等数据
+    }
+
+    fun setReinforcementMode(enabled: Boolean) {
         viewModelScope.launch {
             try {
-                appPreferences.resetStudyStats()
+                appPreferences.setReinforcementMode(enabled)
             } catch (e: Exception) {
                 _uiState.value = _uiState.value.copy(
-                    error = e.message ?: "重置学习统计失败"
+                    error = e.message ?: "设置强化模式失败"
                 )
+            }
+        }
+    }
+
+    // 以下为对话框开关与复位操作
+    fun showResetDataDialog() { _uiState.value = _uiState.value.copy(showResetDataDialog = true) }
+    fun hideResetDataDialog() { _uiState.value = _uiState.value.copy(showResetDataDialog = false) }
+    fun showResetSettingsDialog() { _uiState.value = _uiState.value.copy(showResetSettingsDialog = true) }
+    fun hideResetSettingsDialog() { _uiState.value = _uiState.value.copy(showResetSettingsDialog = false) }
+
+    fun resetLearningData() { resetStudyStats() }
+    fun resetSettings() {
+        viewModelScope.launch {
+            try { appPreferences.resetToDefaults() } catch (e: Exception) {
+                _uiState.value = _uiState.value.copy(error = e.message ?: "重置设置失败")
             }
         }
     }
@@ -185,12 +203,14 @@ data class SettingsUiState(
     val dailyGoal: Int = 30,
     val showNumber: Boolean = true,
     val autoNext: Boolean = false,
-    val vibration: Boolean = true,
-    val sound: Boolean = false,
+    val vibrationEnabled: Boolean = true,
+    val soundEnabled: Boolean = false,
     val darkTheme: Boolean = false,
-    val fontSize: Int = 16,
-    val studyStreak: Int = 0,
+    val fontSize: Int = 1,
+    val reinforcementMode: Boolean = false,
     val showDailyGoalDialog: Boolean = false,
     val showFontSizeDialog: Boolean = false,
+    val showResetDataDialog: Boolean = false,
+    val showResetSettingsDialog: Boolean = false,
     val error: String? = null
 )

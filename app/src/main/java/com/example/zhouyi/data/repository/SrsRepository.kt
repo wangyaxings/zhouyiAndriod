@@ -6,6 +6,7 @@ import com.example.zhouyi.data.database.SrsStateDao
 import com.example.zhouyi.data.model.SrsState
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
 
 /**
@@ -18,17 +19,13 @@ class SrsRepository(context: Context) {
     /**
      * 获取所有SRS状态
      */
-    fun getAllSrsStates(): Flow<List<SrsState>> {
-        return srsStateDao.getAllSrsStates()
-    }
+    fun getAllSrsStates(): Flow<List<SrsState>> = srsStateDao.getAllSrsStates()
 
     /**
      * 根据卦象ID获取SRS状态
      */
-    suspend fun getSrsStateByHexagram(hexagramId: Int): SrsState? {
-        return withContext(Dispatchers.IO) {
-            srsStateDao.getSrsStateByHexagram(hexagramId)
-        }
+    suspend fun getSrsStateByHexagram(hexagramId: Int): SrsState? = withContext(Dispatchers.IO) {
+        srsStateDao.getSrsStateByHexagramId(hexagramId)
     }
 
     /**
@@ -43,55 +40,43 @@ class SrsRepository(context: Context) {
     /**
      * 获取需要复习的SRS状态
      */
-    suspend fun getDueSrsStates(timestamp: Long): List<SrsState> {
-        return withContext(Dispatchers.IO) {
-            srsStateDao.getDueSrsStates(timestamp)
-        }
+    suspend fun getDueSrsStates(timestamp: Long): List<SrsState> = withContext(Dispatchers.IO) {
+        srsStateDao.getDueSrsStates(timestamp)
     }
 
     /**
      * 根据盒子编号获取SRS状态数量
      */
-    suspend fun getSrsStateCountByBucket(bucket: Int): Int {
-        return withContext(Dispatchers.IO) {
-            srsStateDao.getSrsStateCountByBucket(bucket)
-        }
+    suspend fun getSrsStateCountByBucket(bucket: Int): Int = withContext(Dispatchers.IO) {
+        srsStateDao.getSrsStateCountByBucket(bucket)
     }
 
     /**
      * 插入SRS状态
      */
-    suspend fun insertSrsState(srsState: SrsState) {
-        withContext(Dispatchers.IO) {
-            srsStateDao.insertSrsState(srsState)
-        }
+    suspend fun insertSrsState(srsState: SrsState) = withContext(Dispatchers.IO) {
+        srsStateDao.insertSrsState(srsState)
     }
 
     /**
      * 更新SRS状态
      */
-    suspend fun updateSrsState(srsState: SrsState) {
-        withContext(Dispatchers.IO) {
-            srsStateDao.updateSrsState(srsState)
-        }
+    suspend fun updateSrsState(srsState: SrsState) = withContext(Dispatchers.IO) {
+        srsStateDao.updateSrsState(srsState)
     }
 
     /**
      * 删除SRS状态
      */
-    suspend fun deleteSrsState(srsState: SrsState) {
-        withContext(Dispatchers.IO) {
-            srsStateDao.deleteSrsState(srsState)
-        }
+    suspend fun deleteSrsState(srsState: SrsState) = withContext(Dispatchers.IO) {
+        srsStateDao.deleteSrsState(srsState)
     }
 
     /**
      * 根据卦象ID删除SRS状态
      */
-    suspend fun deleteSrsStateByHexagram(hexagramId: Int) {
-        withContext(Dispatchers.IO) {
-            srsStateDao.deleteSrsStateByHexagram(hexagramId)
-        }
+    suspend fun deleteSrsStateByHexagram(hexagramId: Int) = withContext(Dispatchers.IO) {
+        srsStateDao.deleteSrsStateByHexagramId(hexagramId)
     }
 
     /**
@@ -99,12 +84,12 @@ class SrsRepository(context: Context) {
      */
     suspend fun processAnswer(hexagramId: Int, isCorrect: Boolean) {
         withContext(Dispatchers.IO) {
-            val currentState = srsStateDao.getSrsStateByHexagram(hexagramId)
+            val currentState = srsStateDao.getSrsStateByHexagramId(hexagramId)
             val newState = if (isCorrect) {
                 // 答对：进入下一个盒子
                 val currentBucket = currentState?.bucket ?: 2
                 val newBucket = minOf(currentBucket + 1, 5)
-                val interval = SrsState.getIntervalForBucket(newBucket)
+                val interval = SrsState.BUCKET_INTERVALS[newBucket] ?: 0L
                 val dueTimestamp = System.currentTimeMillis() + interval
 
                 SrsState(
@@ -128,23 +113,25 @@ class SrsRepository(context: Context) {
     /**
      * 获取需要复习的卦象ID列表
      */
-    suspend fun getDueHexagramIds(): List<Int> {
-        return withContext(Dispatchers.IO) {
-            val now = System.currentTimeMillis()
-            srsStateDao.getDueSrsStates(now).map { it.hexagramId }
-        }
+    suspend fun getDueHexagramIds(): List<Int> = withContext(Dispatchers.IO) {
+        val now = System.currentTimeMillis()
+        srsStateDao.getDueSrsStates(now).map { it.hexagramId }
     }
 
     /**
      * 获取SRS统计信息
      */
-    suspend fun getSrsStatistics(): Map<Int, Int> {
-        return withContext(Dispatchers.IO) {
-            val bucketCounts = mutableMapOf<Int, Int>()
-            for (bucket in 1..5) {
-                bucketCounts[bucket] = srsStateDao.getSrsStateCountByBucket(bucket)
-            }
-            bucketCounts
+    suspend fun getSrsStatistics(): Map<Int, Int> = withContext(Dispatchers.IO) {
+        val bucketCounts = mutableMapOf<Int, Int>()
+        for (bucket in 1..5) {
+            bucketCounts[bucket] = srsStateDao.getSrsStateCountByBucket(bucket)
         }
+        bucketCounts
+    }
+
+    // 今日到期数量（Flow），用于主页复习提醒
+    fun getTodayDueCount(): Flow<Int> = getAllSrsStates().map { states ->
+        val now = System.currentTimeMillis()
+        states.count { it.dueTimestamp <= now }
     }
 }

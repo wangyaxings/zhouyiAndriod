@@ -15,7 +15,7 @@ import kotlinx.coroutines.withContext
  * 六十四卦数据仓库
  * 负责数据的初始化和业务逻辑
  */
-class HexagramRepository(context: Context) {
+class HexagramRepository(private val context: Context) {
 
     private val hexagramDao: HexagramDao = AppDatabase.getDatabase(context).hexagramDao()
     private val moshi = Moshi.Builder()
@@ -42,15 +42,6 @@ class HexagramRepository(context: Context) {
     }
 
     /**
-     * 根据卦名获取卦象
-     */
-    suspend fun getHexagramsByTrigram(trigram: String): List<Hexagram> {
-        return withContext(Dispatchers.IO) {
-            hexagramDao.getHexagramsByTrigram(trigram)
-        }
-    }
-
-    /**
      * 根据上卦获取卦象
      */
     suspend fun getHexagramsByUpperTrigram(upperTrigram: String): List<Hexagram> {
@@ -72,14 +63,16 @@ class HexagramRepository(context: Context) {
      * 初始化数据
      * 从assets中的JSON文件加载六十四卦数据
      */
-    suspend fun initializeData(context: Context) {
+    suspend fun initializeData() {
         withContext(Dispatchers.IO) {
             val count = hexagramDao.getHexagramCount()
             if (count == 0) {
                 try {
                     val jsonString = context.assets.open("hexagrams.json").bufferedReader().use { it.readText() }
                     val hexagrams = hexagramListAdapter.fromJson(jsonString) ?: emptyList()
-                    hexagramDao.insertAllHexagrams(hexagrams)
+                    if (hexagrams.isNotEmpty()) {
+                        hexagramDao.insertHexagrams(hexagrams)
+                    }
                 } catch (e: Exception) {
                     e.printStackTrace()
                 }
@@ -95,4 +88,7 @@ class HexagramRepository(context: Context) {
             hexagramDao.getHexagramCount() == 64
         }
     }
+
+    // 兼容旧接口
+    suspend fun initializeData(ctx: Context) = initializeData()
 }

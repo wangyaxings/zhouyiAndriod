@@ -13,10 +13,11 @@ import kotlinx.coroutines.flow.first
  */
 class StatisticsService(context: Context) {
 
-    private val attemptRepository = AttemptRepository(context)
-    private val hexagramRepository = HexagramRepository(context)
-    private val srsRepository = SrsRepository(context)
-    private val wrongBookRepository = WrongBookRepository(context)
+    private val appContext = context.applicationContext
+    private val attemptRepository = AttemptRepository(appContext)
+    private val hexagramRepository = HexagramRepository(appContext)
+    private val srsRepository = SrsRepository(appContext)
+    private val wrongBookRepository = WrongBookRepository(appContext)
 
     /**
      * 获取总体统计
@@ -30,7 +31,7 @@ class StatisticsService(context: Context) {
         val overallAccuracy = if (totalAttempts > 0) totalCorrect.toFloat() / totalAttempts else 0f
 
         val wrongCount = wrongBookRepository.getWrongBookCount()
-        val masteredCount = srsRepository.getSrsStatistics().bucketCounts[5] ?: 0
+        val masteredCount = srsRepository.getSrsStatistics()[5] ?: 0
 
         return OverallStats(
             totalHexagrams = totalHexagrams,
@@ -50,10 +51,11 @@ class StatisticsService(context: Context) {
         val today = System.currentTimeMillis()
         val oneDayAgo = today - (24 * 60 * 60 * 1000)
 
-        val totalAttempts = attemptRepository.getTotalCountSince(oneDayAgo)
-        val correctAttempts = attemptRepository.getCorrectCountSince(oneDayAgo)
-        val accuracy = attemptRepository.getAccuracySince(oneDayAgo)
-        val studiedHexagrams = attemptRepository.getStudiedHexagramsSince(oneDayAgo).size
+        val attempts = attemptRepository.getAttemptsByTimeRange(oneDayAgo, today)
+        val totalAttempts = attempts.size
+        val correctAttempts = attempts.count { it.isCorrect }
+        val accuracy = if (totalAttempts > 0) correctAttempts.toFloat() / totalAttempts else 0f
+        val studiedHexagrams = attempts.map { it.hexagramId }.distinct().size
 
         return DailyStats(
             date = today,
@@ -141,7 +143,7 @@ class StatisticsService(context: Context) {
         val studiedHexagrams = attemptRepository.getAllAttempts().first()
             .map { it.hexagramId }.distinct().size
 
-        val masteredHexagrams = srsRepository.getSrsStatistics().bucketCounts[5] ?: 0
+        val masteredHexagrams = srsRepository.getSrsStatistics()[5] ?: 0
         val wrongHexagrams = wrongBookRepository.getWrongBookCount()
 
         return LearningProgress(

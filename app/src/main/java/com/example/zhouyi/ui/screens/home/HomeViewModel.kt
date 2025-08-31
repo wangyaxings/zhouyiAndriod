@@ -33,15 +33,22 @@ class HomeViewModel(
      */
     private fun loadData() {
         viewModelScope.launch {
-            // 合并多个数据流
+            // 合并多个数据流（6个以上使用数组变体）
             combine(
                 attemptRepository.getTodayStatistics(),
                 attemptRepository.getOverallStatistics(),
-                wrongBookRepository.getWrongBookCount(),
+                wrongBookRepository.observeWrongBookCount(),
                 srsRepository.getTodayDueCount(),
                 preferences.dailyGoal,
                 preferences.firstLaunch
-            ) { todayStats, overallStats, wrongCount, dueCount, dailyGoal, firstLaunch ->
+            ) { values: Array<Any?> ->
+                val todayStats = values[0] as com.example.zhouyi.data.database.AttemptStatistics
+                val overallStats = values[1] as com.example.zhouyi.data.database.AttemptStatistics
+                val wrongCount = values[2] as Int
+                val dueCount = values[3] as Int
+                val dailyGoal = values[4] as Int
+                val firstLaunch = values[5] as Boolean
+
                 HomeUiState(
                     todayProgress = createTodayProgress(todayStats, dailyGoal),
                     learningStats = createLearningStats(overallStats),
@@ -76,7 +83,7 @@ class HomeViewModel(
                 completedQuestions = 0,
                 dailyGoal = dailyGoal,
                 completionRate = 0f,
-                accuracy = 0f
+                accuracy = 0.0
             )
         }
     }

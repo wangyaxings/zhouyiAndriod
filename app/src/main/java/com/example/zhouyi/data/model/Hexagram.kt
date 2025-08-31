@@ -39,4 +39,19 @@ data class Hexagram(
     fun getTrigramDescription(): String {
         return "$upperTrigram$lowerTrigram$nameZh"
     }
+
+    /**
+     * 获取自上而下的六爻布尔数组（阳爻=true，阴爻=false）
+     * 由字段 linesBits 解析，期望长度为6，不足时补齐为阴爻
+     */
+    fun getLines(): List<Boolean> {
+        if (linesBits.isEmpty()) return List(6) { false }
+        val bits = linesBits.trim()
+        val list = bits.map { ch -> ch == '1' }
+        return when {
+            list.size == 6 -> list
+            list.size > 6 -> list.take(6)
+            else -> list + List(6 - list.size) { false }
+        }
+    }
 }
