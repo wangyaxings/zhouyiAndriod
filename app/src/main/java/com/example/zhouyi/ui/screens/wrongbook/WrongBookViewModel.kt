@@ -17,10 +17,10 @@ class WrongBookViewModel(
     private val wrongBookRepository: WrongBookRepository,
     private val hexagramRepository: HexagramRepository
 ) : ViewModel() {
-    
+
     private val _uiState = MutableStateFlow(WrongBookUiState())
     val uiState: StateFlow<WrongBookUiState> = _uiState.asStateFlow()
-    
+
     /**
      * 加载错题本数据
      */
@@ -28,11 +28,11 @@ class WrongBookViewModel(
         viewModelScope.launch {
             try {
                 _uiState.value = _uiState.value.copy(isLoading = true)
-                
+
                 // 获取错题列表
                 val wrongBooks = wrongBookRepository.getAllWrongBooks()
                 val hexagrams = hexagramRepository.getAllHexagrams().first()
-                
+
                 // 组合错题数据
                 val wrongItems = wrongBooks.map { wrongBook ->
                     val hexagram = hexagrams.find { it.id == wrongBook.hexagramId }
@@ -45,16 +45,16 @@ class WrongBookViewModel(
                         )
                     } else null
                 }.filterNotNull()
-                
+
                 // 计算统计信息
                 val stats = calculateStats(wrongItems)
-                
+
                 _uiState.value = _uiState.value.copy(
                     wrongItems = wrongItems,
                     stats = stats,
                     isLoading = false
                 )
-                
+
             } catch (e: Exception) {
                 _uiState.value = _uiState.value.copy(
                     error = e.message ?: "加载错题本失败",
@@ -63,25 +63,25 @@ class WrongBookViewModel(
             }
         }
     }
-    
+
     /**
      * 计算统计信息
      */
     private fun calculateStats(wrongItems: List<WrongBookItem>): WrongBookStats {
         val totalCount = wrongItems.size
         val highFrequencyCount = wrongItems.count { it.wrongCount >= 3 }
-        val recentCount = wrongItems.count { 
+        val recentCount = wrongItems.count {
             val daysSinceLastWrong = it.getDaysSinceLastWrong()
             daysSinceLastWrong <= 7 // 最近7天内的错题
         }
-        
+
         return WrongBookStats(
             totalCount = totalCount,
             highFrequencyCount = highFrequencyCount,
             recentCount = recentCount
         )
     }
-    
+
     /**
      * 选择卦象
      */
@@ -91,7 +91,7 @@ class WrongBookViewModel(
             selectedHexagram = hexagram
         )
     }
-    
+
     /**
      * 从错题本中移除
      */
@@ -99,10 +99,10 @@ class WrongBookViewModel(
         viewModelScope.launch {
             try {
                 wrongBookRepository.deleteWrongBook(hexagramId)
-                
+
                 // 重新加载数据
                 loadWrongBook()
-                
+
             } catch (e: Exception) {
                 _uiState.value = _uiState.value.copy(
                     error = e.message ?: "移除失败"
@@ -110,7 +110,7 @@ class WrongBookViewModel(
             }
         }
     }
-    
+
     /**
      * 清空错题本
      */
@@ -118,12 +118,12 @@ class WrongBookViewModel(
         viewModelScope.launch {
             try {
                 wrongBookRepository.clearAllWrongBooks()
-                
+
                 _uiState.value = _uiState.value.copy(
                     wrongItems = emptyList(),
                     stats = WrongBookStats(0, 0, 0)
                 )
-                
+
             } catch (e: Exception) {
                 _uiState.value = _uiState.value.copy(
                     error = e.message ?: "清空失败"
@@ -131,14 +131,14 @@ class WrongBookViewModel(
             }
         }
     }
-    
+
     /**
      * 刷新数据
      */
     fun refreshData() {
         loadWrongBook()
     }
-    
+
     /**
      * 清除错误状态
      */
@@ -175,7 +175,7 @@ data class WrongBookItem(
         val timeDiff = currentTime - lastWrongTimestamp
         return (timeDiff / (1000 * 60 * 60 * 24)).toInt()
     }
-    
+
     /**
      * 获取距离首次错题的天数
      */
@@ -184,7 +184,7 @@ data class WrongBookItem(
         val timeDiff = currentTime - firstWrongTimestamp
         return (timeDiff / (1000 * 60 * 60 * 24)).toInt()
     }
-    
+
     /**
      * 获取最后错题时间的文本描述
      */
@@ -198,7 +198,7 @@ data class WrongBookItem(
             else -> "${days / 30}个月前"
         }
     }
-    
+
     /**
      * 获取首次错题时间的文本描述
      */

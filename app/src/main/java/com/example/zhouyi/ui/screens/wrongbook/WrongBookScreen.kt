@@ -27,11 +27,11 @@ fun WrongBookScreen(
     onStartReview: () -> Unit
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
-    
+
     LaunchedEffect(Unit) {
         viewModel.loadWrongBook()
     }
-    
+
     Scaffold(
         topBar = {
             TopAppBar(
@@ -65,7 +65,7 @@ fun WrongBookScreen(
                         .padding(16.dp)
                 )
             }
-            
+
             // 错题列表
             if (uiState.isLoading) {
                 Box(
@@ -178,17 +178,17 @@ private fun EmptyWrongBook(modifier: Modifier = Modifier) {
             modifier = Modifier.size(64.dp),
             tint = MaterialTheme.colorScheme.onSurfaceVariant
         )
-        
+
         Spacer(modifier = Modifier.height(16.dp))
-        
+
         Text(
             text = "暂无错题",
             style = MaterialTheme.typography.headlineSmall,
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )
-        
+
         Spacer(modifier = Modifier.height(8.dp))
-        
+
         Text(
             text = "开始练习后，答错的题目会出现在这里",
             style = MaterialTheme.typography.bodyMedium,
@@ -249,9 +249,9 @@ private fun WrongBookItemCard(
                 hexagram = item.hexagram,
                 modifier = Modifier.size(60.dp)
             )
-            
+
             Spacer(modifier = Modifier.width(16.dp))
-            
+
             // 卦象信息
             Column(
                 modifier = Modifier.weight(1f)
@@ -260,15 +260,15 @@ private fun WrongBookItemCard(
                     text = item.hexagram.getFullName(),
                     style = MaterialTheme.typography.titleMedium
                 )
-                
+
                 Text(
                     text = item.hexagram.getTrigramDescription(),
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
-                
+
                 Spacer(modifier = Modifier.height(4.dp))
-                
+
                 // 错题统计
                 Row(
                     horizontalArrangement = Arrangement.spacedBy(16.dp)
@@ -278,7 +278,7 @@ private fun WrongBookItemCard(
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.error
                     )
-                    
+
                     Text(
                         text = "最后错题: ${item.getLastWrongDaysText()}",
                         style = MaterialTheme.typography.bodySmall,
@@ -286,7 +286,7 @@ private fun WrongBookItemCard(
                     )
                 }
             }
-            
+
             // 操作按钮
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally
@@ -298,7 +298,7 @@ private fun WrongBookItemCard(
                         tint = MaterialTheme.colorScheme.primary
                     )
                 }
-                
+
                 IconButton(onClick = onRemove) {
                     Icon(
                         Icons.Default.Delete,

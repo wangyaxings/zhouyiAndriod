@@ -9,19 +9,20 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 
 /**
  * 设置页面
+ * 管理用户偏好设置
  */
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SettingsScreen(
-    onNavigateBack: () -> Unit,
-    viewModel: SettingsViewModel = viewModel()
+    viewModel: SettingsViewModel,
+    onNavigateBack: () -> Unit
 ) {
-    val uiState by viewModel.uiState.collectAsState()
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     LaunchedEffect(Unit) {
         viewModel.loadSettings()
@@ -47,405 +48,353 @@ fun SettingsScreen(
                 .padding(16.dp)
         ) {
             // 学习设置
-            Card(
-                modifier = Modifier.fillMaxWidth()
+            SettingsSection(
+                title = "学习设置",
+                icon = Icons.Default.School
             ) {
-                Column(
-                    modifier = Modifier.padding(16.dp)
-                ) {
-                    Text(
-                        text = "学习设置",
-                        style = MaterialTheme.typography.titleLarge,
-                        fontWeight = FontWeight.Bold
-                    )
-                    Spacer(modifier = Modifier.height(16.dp))
-
-                    // 每日目标
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.SpaceBetween,
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Column {
-                            Text(
-                                text = "每日目标",
-                                style = MaterialTheme.typography.titleMedium
-                            )
-                            Text(
-                                text = "设置每日练习的题目数量",
-                                style = MaterialTheme.typography.bodySmall,
-                                color = MaterialTheme.colorScheme.onSurfaceVariant
-                            )
-                        }
-                        OutlinedButton(
-                            onClick = { viewModel.showDailyGoalDialog() }
-                        ) {
-                            Text("${uiState.dailyGoal}题")
-                        }
+                // 每日目标
+                SettingsItem(
+                    title = "每日目标",
+                    subtitle = "${uiState.dailyGoal} 题",
+                    icon = Icons.Default.Target,
+                    onClick = {
+                        viewModel.showDailyGoalDialog()
                     }
+                )
 
-                    Spacer(modifier = Modifier.height(16.dp))
-
-                    // 显示编号
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.SpaceBetween,
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Column {
-                            Text(
-                                text = "显示编号",
-                                style = MaterialTheme.typography.titleMedium
-                            )
-                            Text(
-                                text = "在卦象名称前显示编号",
-                                style = MaterialTheme.typography.bodySmall,
-                                color = MaterialTheme.colorScheme.onSurfaceVariant
-                            )
-                        }
-                        Switch(
-                            checked = uiState.showNumber,
-                            onCheckedChange = { viewModel.setShowNumber(it) }
-                        )
+                // 强化模式
+                SettingsSwitch(
+                    title = "强化模式",
+                    subtitle = "优先复习错题",
+                    icon = Icons.Default.Psychology,
+                    checked = uiState.reinforcementMode,
+                    onCheckedChange = { checked ->
+                        viewModel.setReinforcementMode(checked)
                     }
+                )
 
-                    Spacer(modifier = Modifier.height(16.dp))
-
-                    // 自动下一题
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.SpaceBetween,
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Column {
-                            Text(
-                                text = "自动下一题",
-                                style = MaterialTheme.typography.titleMedium
-                            )
-                            Text(
-                                text = "答题后自动进入下一题",
-                                style = MaterialTheme.typography.bodySmall,
-                                color = MaterialTheme.colorScheme.onSurfaceVariant
-                            )
-                        }
-                        Switch(
-                            checked = uiState.autoNext,
-                            onCheckedChange = { viewModel.setAutoNext(it) }
-                        )
+                // 显示编号
+                SettingsSwitch(
+                    title = "显示编号",
+                    subtitle = "在选项中显示卦象编号",
+                    icon = Icons.Default.Numbers,
+                    checked = uiState.showNumber,
+                    onCheckedChange = { checked ->
+                        viewModel.setShowNumber(checked)
                     }
-                }
+                )
+
+                // 自动下一题
+                SettingsSwitch(
+                    title = "自动下一题",
+                    subtitle = "答题后自动进入下一题",
+                    icon = Icons.Default.PlayArrow,
+                    checked = uiState.autoNext,
+                    onCheckedChange = { checked ->
+                        viewModel.setAutoNext(checked)
+                    }
+                )
             }
-
-            Spacer(modifier = Modifier.height(16.dp))
 
             // 界面设置
-            Card(
-                modifier = Modifier.fillMaxWidth()
+            SettingsSection(
+                title = "界面设置",
+                icon = Icons.Default.Palette
             ) {
-                Column(
-                    modifier = Modifier.padding(16.dp)
-                ) {
-                    Text(
-                        text = "界面设置",
-                        style = MaterialTheme.typography.titleLarge,
-                        fontWeight = FontWeight.Bold
-                    )
-                    Spacer(modifier = Modifier.height(16.dp))
-
-                    // 深色主题
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.SpaceBetween,
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Column {
-                            Text(
-                                text = "深色主题",
-                                style = MaterialTheme.typography.titleMedium
-                            )
-                            Text(
-                                text = "使用深色主题模式",
-                                style = MaterialTheme.typography.bodySmall,
-                                color = MaterialTheme.colorScheme.onSurfaceVariant
-                            )
-                        }
-                        Switch(
-                            checked = uiState.darkTheme,
-                            onCheckedChange = { viewModel.setDarkTheme(it) }
-                        )
+                // 深色主题
+                SettingsSwitch(
+                    title = "深色主题",
+                    subtitle = "使用深色界面",
+                    icon = Icons.Default.DarkMode,
+                    checked = uiState.darkTheme,
+                    onCheckedChange = { checked ->
+                        viewModel.setDarkTheme(checked)
                     }
+                )
 
-                    Spacer(modifier = Modifier.height(16.dp))
-
-                    // 字体大小
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.SpaceBetween,
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Column {
-                            Text(
-                                text = "字体大小",
-                                style = MaterialTheme.typography.titleMedium
-                            )
-                            Text(
-                                text = "调整应用字体大小",
-                                style = MaterialTheme.typography.bodySmall,
-                                color = MaterialTheme.colorScheme.onSurfaceVariant
-                            )
-                        }
-                        OutlinedButton(
-                            onClick = { viewModel.showFontSizeDialog() }
-                        ) {
-                            Text("${uiState.fontSize}sp")
-                        }
+                // 字体大小
+                SettingsItem(
+                    title = "字体大小",
+                    subtitle = getFontSizeText(uiState.fontSize),
+                    icon = Icons.Default.TextFields,
+                    onClick = {
+                        viewModel.showFontSizeDialog()
                     }
-                }
+                )
             }
-
-            Spacer(modifier = Modifier.height(16.dp))
 
             // 反馈设置
-            Card(
-                modifier = Modifier.fillMaxWidth()
+            SettingsSection(
+                title = "反馈设置",
+                icon = Icons.Default.Notifications
             ) {
-                Column(
-                    modifier = Modifier.padding(16.dp)
-                ) {
-                    Text(
-                        text = "反馈设置",
-                        style = MaterialTheme.typography.titleLarge,
-                        fontWeight = FontWeight.Bold
-                    )
-                    Spacer(modifier = Modifier.height(16.dp))
-
-                    // 震动
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.SpaceBetween,
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Column {
-                            Text(
-                                text = "震动反馈",
-                                style = MaterialTheme.typography.titleMedium
-                            )
-                            Text(
-                                text = "答题时提供震动反馈",
-                                style = MaterialTheme.typography.bodySmall,
-                                color = MaterialTheme.colorScheme.onSurfaceVariant
-                            )
-                        }
-                        Switch(
-                            checked = uiState.vibration,
-                            onCheckedChange = { viewModel.setVibration(it) }
-                        )
+                // 震动反馈
+                SettingsSwitch(
+                    title = "震动反馈",
+                    subtitle = "答题时提供震动反馈",
+                    icon = Icons.Default.Vibration,
+                    checked = uiState.vibrationEnabled,
+                    onCheckedChange = { checked ->
+                        viewModel.setVibrationEnabled(checked)
                     }
+                )
 
-                    Spacer(modifier = Modifier.height(16.dp))
-
-                    // 音效
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.SpaceBetween,
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Column {
-                            Text(
-                                text = "音效反馈",
-                                style = MaterialTheme.typography.titleMedium
-                            )
-                            Text(
-                                text = "答题时播放音效",
-                                style = MaterialTheme.typography.bodySmall,
-                                color = MaterialTheme.colorScheme.onSurfaceVariant
-                            )
-                        }
-                        Switch(
-                            checked = uiState.sound,
-                            onCheckedChange = { viewModel.setSound(it) }
-                        )
+                // 音效反馈
+                SettingsSwitch(
+                    title = "音效反馈",
+                    subtitle = "答题时播放音效",
+                    icon = Icons.Default.VolumeUp,
+                    checked = uiState.soundEnabled,
+                    onCheckedChange = { checked ->
+                        viewModel.setSoundEnabled(checked)
                     }
-                }
+                )
             }
 
-            Spacer(modifier = Modifier.height(16.dp))
-
-            // 学习统计
-            Card(
-                modifier = Modifier.fillMaxWidth()
+            // 数据管理
+            SettingsSection(
+                title = "数据管理",
+                icon = Icons.Default.Storage
             ) {
-                Column(
-                    modifier = Modifier.padding(16.dp)
-                ) {
-                    Text(
-                        text = "学习统计",
-                        style = MaterialTheme.typography.titleLarge,
-                        fontWeight = FontWeight.Bold
-                    )
-                    Spacer(modifier = Modifier.height(16.dp))
-
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.SpaceBetween,
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Column {
-                            Text(
-                                text = "连续学习天数",
-                                style = MaterialTheme.typography.titleMedium
-                            )
-                            Text(
-                                text = "当前连续学习天数",
-                                style = MaterialTheme.typography.bodySmall,
-                                color = MaterialTheme.colorScheme.onSurfaceVariant
-                            )
-                        }
-                        Text(
-                            text = "${uiState.studyStreak}天",
-                            style = MaterialTheme.typography.titleMedium,
-                            fontWeight = FontWeight.Bold,
-                            color = MaterialTheme.colorScheme.primary
-                        )
+                // 重置学习数据
+                SettingsItem(
+                    title = "重置学习数据",
+                    subtitle = "清除所有答题记录和进度",
+                    icon = Icons.Default.Refresh,
+                    onClick = {
+                        viewModel.showResetDataDialog()
                     }
+                )
 
-                    Spacer(modifier = Modifier.height(16.dp))
-
-                    Button(
-                        onClick = { viewModel.resetStudyStats() },
-                        modifier = Modifier.fillMaxWidth(),
-                        colors = ButtonDefaults.buttonColors(
-                            containerColor = MaterialTheme.colorScheme.error
-                        )
-                    ) {
-                        Icon(Icons.Default.Refresh, contentDescription = null)
-                        Spacer(modifier = Modifier.width(8.dp))
-                        Text("重置学习统计")
+                // 重置设置
+                SettingsItem(
+                    title = "重置设置",
+                    subtitle = "恢复所有设置为默认值",
+                    icon = Icons.Default.Restore,
+                    onClick = {
+                        viewModel.showResetSettingsDialog()
                     }
-                }
+                )
+            }
+
+            // 关于
+            SettingsSection(
+                title = "关于",
+                icon = Icons.Default.Info
+            ) {
+                SettingsItem(
+                    title = "版本信息",
+                    subtitle = "周易六十四卦 v1.0.0",
+                    icon = Icons.Default.Apps,
+                    onClick = { }
+                )
+
+                SettingsItem(
+                    title = "开发者信息",
+                    subtitle = "基于间隔复习算法的学习应用",
+                    icon = Icons.Default.Person,
+                    onClick = { }
+                )
             }
         }
+    }
 
-        // 每日目标对话框
-        if (uiState.showDailyGoalDialog) {
-            DailyGoalDialog(
-                currentGoal = uiState.dailyGoal,
-                onDismiss = { viewModel.hideDailyGoalDialog() },
-                onConfirm = { goal ->
-                    viewModel.setDailyGoal(goal)
-                    viewModel.hideDailyGoalDialog()
-                }
+    // 每日目标对话框
+    if (uiState.showDailyGoalDialog) {
+        DailyGoalDialog(
+            currentGoal = uiState.dailyGoal,
+            onConfirm = { goal ->
+                viewModel.setDailyGoal(goal)
+                viewModel.hideDailyGoalDialog()
+            },
+            onDismiss = {
+                viewModel.hideDailyGoalDialog()
+            }
+        )
+    }
+
+    // 字体大小对话框
+    if (uiState.showFontSizeDialog) {
+        FontSizeDialog(
+            currentSize = uiState.fontSize,
+            onConfirm = { size ->
+                viewModel.setFontSize(size)
+                viewModel.hideFontSizeDialog()
+            },
+            onDismiss = {
+                viewModel.hideFontSizeDialog()
+            }
+        )
+    }
+
+    // 重置数据确认对话框
+    if (uiState.showResetDataDialog) {
+        ResetDataDialog(
+            onConfirm = {
+                viewModel.resetLearningData()
+                viewModel.hideResetDataDialog()
+            },
+            onDismiss = {
+                viewModel.hideResetDataDialog()
+            }
+        )
+    }
+
+    // 重置设置确认对话框
+    if (uiState.showResetSettingsDialog) {
+        ResetSettingsDialog(
+            onConfirm = {
+                viewModel.resetSettings()
+                viewModel.hideResetSettingsDialog()
+            },
+            onDismiss = {
+                viewModel.hideResetSettingsDialog()
+            }
+        )
+    }
+}
+
+/**
+ * 设置分组
+ */
+@Composable
+private fun SettingsSection(
+    title: String,
+    icon: androidx.compose.ui.graphics.vector.ImageVector,
+    content: @Composable () -> Unit
+) {
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(bottom = 16.dp),
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.surface
+        )
+    ) {
+        Column(
+            modifier = Modifier.padding(16.dp)
+        ) {
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier.padding(bottom = 12.dp)
+            ) {
+                Icon(
+                    icon,
+                    contentDescription = null,
+                    tint = MaterialTheme.colorScheme.primary,
+                    modifier = Modifier.padding(end = 8.dp)
+                )
+                Text(
+                    text = title,
+                    style = MaterialTheme.typography.titleMedium,
+                    color = MaterialTheme.colorScheme.primary
+                )
+            }
+            content()
+        }
+    }
+}
+
+/**
+ * 设置项
+ */
+@Composable
+private fun SettingsItem(
+    title: String,
+    subtitle: String,
+    icon: androidx.compose.ui.graphics.vector.ImageVector,
+    onClick: () -> Unit
+) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = 8.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Icon(
+            icon,
+            contentDescription = null,
+            tint = MaterialTheme.colorScheme.onSurfaceVariant,
+            modifier = Modifier.padding(end = 16.dp)
+        )
+
+        Column(
+            modifier = Modifier.weight(1f)
+        ) {
+            Text(
+                text = title,
+                style = MaterialTheme.typography.bodyLarge
+            )
+            Text(
+                text = subtitle,
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
             )
         }
 
-        // 字体大小对话框
-        if (uiState.showFontSizeDialog) {
-            FontSizeDialog(
-                currentSize = uiState.fontSize,
-                onDismiss = { viewModel.hideFontSizeDialog() },
-                onConfirm = { size ->
-                    viewModel.setFontSize(size)
-                    viewModel.hideFontSizeDialog()
-                }
+        IconButton(onClick = onClick) {
+            Icon(
+                Icons.Default.ChevronRight,
+                contentDescription = "设置",
+                tint = MaterialTheme.colorScheme.onSurfaceVariant
             )
         }
     }
 }
 
+/**
+ * 设置开关
+ */
 @Composable
-private fun DailyGoalDialog(
-    currentGoal: Int,
-    onDismiss: () -> Unit,
-    onConfirm: (Int) -> Unit
+private fun SettingsSwitch(
+    title: String,
+    subtitle: String,
+    icon: androidx.compose.ui.graphics.vector.ImageVector,
+    checked: Boolean,
+    onCheckedChange: (Boolean) -> Unit
 ) {
-    var goal by remember { mutableStateOf(currentGoal) }
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = 8.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Icon(
+            icon,
+            contentDescription = null,
+            tint = MaterialTheme.colorScheme.onSurfaceVariant,
+            modifier = Modifier.padding(end = 16.dp)
+        )
 
-    AlertDialog(
-        onDismissRequest = onDismiss,
-        title = { Text("设置每日目标") },
-        text = {
-            Column {
-                Text("选择每日练习的题目数量：")
-                Spacer(modifier = Modifier.height(16.dp))
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceEvenly
-                ) {
-                    listOf(10, 20, 30, 50, 100).forEach { value ->
-                        OutlinedButton(
-                            onClick = { goal = value },
-                            colors = ButtonDefaults.outlinedButtonColors(
-                                containerColor = if (goal == value) {
-                                    MaterialTheme.colorScheme.primaryContainer
-                                } else {
-                                    MaterialTheme.colorScheme.surface
-                                }
-                            )
-                        ) {
-                            Text("$value")
-                        }
-                    }
-                }
-            }
-        },
-        confirmButton = {
-            TextButton(onClick = { onConfirm(goal) }) {
-                Text("确定")
-            }
-        },
-        dismissButton = {
-            TextButton(onClick = onDismiss) {
-                Text("取消")
-            }
+        Column(
+            modifier = Modifier.weight(1f)
+        ) {
+            Text(
+                text = title,
+                style = MaterialTheme.typography.bodyLarge
+            )
+            Text(
+                text = subtitle,
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
+            )
         }
-    )
+
+        Switch(
+            checked = checked,
+            onCheckedChange = onCheckedChange
+        )
+    }
 }
 
-@Composable
-private fun FontSizeDialog(
-    currentSize: Int,
-    onDismiss: () -> Unit,
-    onConfirm: (Int) -> Unit
-) {
-    var size by remember { mutableStateOf(currentSize) }
-
-    AlertDialog(
-        onDismissRequest = onDismiss,
-        title = { Text("设置字体大小") },
-        text = {
-            Column {
-                Text("选择字体大小：")
-                Spacer(modifier = Modifier.height(16.dp))
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceEvenly
-                ) {
-                    listOf(14, 16, 18, 20, 22).forEach { value ->
-                        OutlinedButton(
-                            onClick = { size = value },
-                            colors = ButtonDefaults.outlinedButtonColors(
-                                containerColor = if (size == value) {
-                                    MaterialTheme.colorScheme.primaryContainer
-                                } else {
-                                    MaterialTheme.colorScheme.surface
-                                }
-                            )
-                        ) {
-                            Text("${value}sp")
-                        }
-                    }
-                }
-            }
-        },
-        confirmButton = {
-            TextButton(onClick = { onConfirm(size) }) {
-                Text("确定")
-            }
-        },
-        dismissButton = {
-            TextButton(onClick = onDismiss) {
-                Text("取消")
-            }
-        }
-    )
+/**
+ * 获取字体大小文本
+ */
+private fun getFontSizeText(size: Int): String {
+    return when (size) {
+        1 -> "小"
+        2 -> "中"
+        3 -> "大"
+        else -> "中"
+    }
 }

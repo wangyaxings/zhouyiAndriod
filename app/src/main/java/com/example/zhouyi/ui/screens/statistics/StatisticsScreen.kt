@@ -24,11 +24,11 @@ fun StatisticsScreen(
     onNavigateBack: () -> Unit
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
-    
+
     LaunchedEffect(Unit) {
         viewModel.loadStatistics()
     }
-    
+
     Scaffold(
         topBar = {
             TopAppBar(
@@ -68,7 +68,7 @@ fun StatisticsScreen(
                         .fillMaxWidth()
                         .padding(bottom = 16.dp)
                 )
-                
+
                 // 学习进度卡片
                 if (uiState.learningProgress != null) {
                     LearningProgressCard(
@@ -78,7 +78,7 @@ fun StatisticsScreen(
                             .padding(bottom = 16.dp)
                     )
                 }
-                
+
                 // SRS状态卡片
                 if (uiState.srsStats != null) {
                     SrsStatsCard(
@@ -88,7 +88,7 @@ fun StatisticsScreen(
                             .padding(bottom = 16.dp)
                     )
                 }
-                
+
                 // 时间统计卡片
                 if (uiState.timeStats != null) {
                     TimeStatsCard(
@@ -98,7 +98,7 @@ fun StatisticsScreen(
                             .padding(bottom = 16.dp)
                     )
                 }
-                
+
                 // 错题统计卡片
                 if (uiState.wrongStats != null) {
                     WrongStatsCard(
@@ -133,9 +133,9 @@ private fun OverallStatsCard(
                 style = MaterialTheme.typography.titleMedium,
                 color = MaterialTheme.colorScheme.onPrimaryContainer
             )
-            
+
             Spacer(modifier = Modifier.height(16.dp))
-            
+
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceEvenly
@@ -182,9 +182,9 @@ private fun LearningProgressCard(
                 style = MaterialTheme.typography.titleMedium,
                 color = MaterialTheme.colorScheme.onSecondaryContainer
             )
-            
+
             Spacer(modifier = Modifier.height(16.dp))
-            
+
             // 已掌握进度
             ProgressItem(
                 label = "已掌握",
@@ -194,7 +194,7 @@ private fun LearningProgressCard(
                 color = MaterialTheme.colorScheme.primary,
                 modifier = Modifier.padding(bottom = 12.dp)
             )
-            
+
             // 学习中进度
             ProgressItem(
                 label = "学习中",
@@ -204,7 +204,7 @@ private fun LearningProgressCard(
                 color = MaterialTheme.colorScheme.secondary,
                 modifier = Modifier.padding(bottom = 12.dp)
             )
-            
+
             // 复习中进度
             ProgressItem(
                 label = "复习中",
@@ -246,18 +246,18 @@ private fun ProgressItem(
                 color = MaterialTheme.colorScheme.onSurface
             )
         }
-        
+
         Spacer(modifier = Modifier.height(4.dp))
-        
+
         LinearProgressIndicator(
             progress = percentage / 100f,
             modifier = Modifier.fillMaxWidth(),
             color = color,
             trackColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.2f)
         )
-        
+
         Spacer(modifier = Modifier.height(4.dp))
-        
+
         Text(
             text = "${String.format("%.1f", percentage)}%",
             style = MaterialTheme.typography.bodySmall,
@@ -288,9 +288,9 @@ private fun SrsStatsCard(
                 style = MaterialTheme.typography.titleMedium,
                 color = MaterialTheme.colorScheme.onTertiaryContainer
             )
-            
+
             Spacer(modifier = Modifier.height(16.dp))
-            
+
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceEvenly
@@ -311,7 +311,7 @@ private fun SrsStatsCard(
                     color = MaterialTheme.colorScheme.onTertiaryContainer
                 )
             }
-            
+
             if (stats.recommendation.isNotEmpty()) {
                 Spacer(modifier = Modifier.height(12.dp))
                 Text(
@@ -346,9 +346,9 @@ private fun TimeStatsCard(
                 style = MaterialTheme.typography.titleMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
-            
+
             Spacer(modifier = Modifier.height(16.dp))
-            
+
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceEvenly
@@ -369,7 +369,7 @@ private fun TimeStatsCard(
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             }
-            
+
             if (stats.averageTimePerQuestion > 0) {
                 Spacer(modifier = Modifier.height(12.dp))
                 Text(
@@ -404,9 +404,9 @@ private fun WrongStatsCard(
                 style = MaterialTheme.typography.titleMedium,
                 color = MaterialTheme.colorScheme.onErrorContainer
             )
-            
+
             Spacer(modifier = Modifier.height(16.dp))
-            
+
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceEvenly
@@ -427,7 +427,7 @@ private fun WrongStatsCard(
                     color = MaterialTheme.colorScheme.onErrorContainer
                 )
             }
-            
+
             if (stats.mostWrongHexagram != null) {
                 Spacer(modifier = Modifier.height(12.dp))
                 Text(
