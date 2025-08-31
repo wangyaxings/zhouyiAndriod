@@ -22,21 +22,27 @@ import androidx.core.view.WindowCompat
  * 支持深色/浅色模式和动态主题
  */
 private val DarkColorScheme = darkColorScheme(
-    primary = Purple80,
-    secondary = PurpleGrey80,
-    tertiary = Pink80
+    primary = NightPrimary,
+    secondary = NightSecondary,
+    tertiary = NightTertiary,
+    background = NightBackground,
+    surface = NightSurface,
+    surfaceVariant = NightSurfaceVariant
 )
 
 private val LightColorScheme = lightColorScheme(
-    primary = Purple40,
-    secondary = PurpleGrey40,
-    tertiary = Pink40
+    primary = InkPrimary,
+    secondary = BronzeSecondary,
+    tertiary = CinnabarTertiary,
+    background = PaperBackground,
+    surface = PaperSurface,
+    surfaceVariant = PaperSurfaceVariant
 )
 
 @Composable
 fun ZhouyiTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
-    dynamicColor: Boolean = true,
+    dynamicColor: Boolean = false,
     content: @Composable () -> Unit
 ) {
     val colorScheme = when {

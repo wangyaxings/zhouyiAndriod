@@ -15,7 +15,7 @@ class Converters {
         .add(Date::class.java, Rfc3339DateJsonAdapter())
         .build()
 
-    private val intListType = Types.newParameterizedType(List::class.java, Int::class.java)
+    private val intListType = Types.newParameterizedType(List::class.java, Int::class.javaObjectType)
     private val stringListType = Types.newParameterizedType(List::class.java, String::class.java)
 
     private val intListAdapter = moshi.adapter<List<Int>>(intListType)

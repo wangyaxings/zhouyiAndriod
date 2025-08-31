@@ -16,6 +16,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.zhouyi.data.model.Hexagram
 import com.example.zhouyi.ui.components.HexagramCanvas
+import com.example.zhouyi.ui.components.SmallHexagramCanvas
 
 /**
  * 练习页面
@@ -80,7 +81,6 @@ fun QuizScreen(
                 uiState.currentQuestion?.let { question ->
                     QuestionDisplay(
                         question = question,
-                        showNumber = uiState.showNumber,
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(bottom = 32.dp)
@@ -115,6 +115,7 @@ fun QuizScreen(
                         question = question,
                         selectedOption = uiState.selectedOption,
                         correctOption = uiState.correctOption,
+                        options = uiState.currentOptions,
                         isCorrect = uiState.isCorrect,
                         onContinue = {
                             viewModel.nextQuestion()
@@ -145,7 +146,6 @@ fun QuizScreen(
 @Composable
 private fun QuestionDisplay(
     question: Hexagram,
-    showNumber: Boolean,
     modifier: Modifier = Modifier
 ) {
     Card(
@@ -165,19 +165,19 @@ private fun QuestionDisplay(
                 modifier = Modifier.padding(bottom = 16.dp)
             )
 
-            // 卦象绘制
-            HexagramCanvas(
-                hexagram = question,
-                modifier = Modifier
-                    .size(120.dp)
-                    .padding(bottom = 16.dp)
-            )
-
-            if (showNumber) {
-                Text(
-                    text = "卦象编号: ${question.id}",
-                    style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
+            // 卦象绘制（轻微淡入+上移动效，按题目ID切换）
+            AnimatedContent(
+                targetState = question.id,
+                transitionSpec = {
+                    (fadeIn(tween(220)) + slideInVertically { it / 8 }) togetherWith
+                        (fadeOut(tween(180)) + slideOutVertically { -it / 12 })
+                }, label = "hexagram-transition"
+            ) {
+                HexagramCanvas(
+                    hexagram = question,
+                    modifier = Modifier
+                        .width(120.dp)
+                        .padding(bottom = 8.dp)
                 )
             }
         }
@@ -241,11 +241,7 @@ private fun OptionButton(
             )
 
             Text(
-                text = if (showNumber) {
-                    "${option.id} ${option.nameZh}"
-                } else {
-                    option.nameZh
-                },
+                text = option.nameZh,
                 style = MaterialTheme.typography.titleMedium
             )
         }
@@ -260,6 +256,7 @@ private fun ResultFeedback(
     question: Hexagram,
     selectedOption: Int?,
     correctOption: Int?,
+    options: List<Hexagram>,
     isCorrect: Boolean,
     onContinue: () -> Unit,
     modifier: Modifier = Modifier
@@ -326,6 +323,42 @@ private fun ResultFeedback(
                 },
                 modifier = Modifier.padding(bottom = 16.dp)
             )
+
+            // 并排对比：你的选择 vs 正确答案
+            val selectedHexagram = selectedOption?.let { options.getOrNull(it) }
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(bottom = 16.dp),
+                horizontalArrangement = Arrangement.SpaceEvenly,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                    Text(
+                        text = "你的选择",
+                        style = MaterialTheme.typography.labelMedium,
+                        color = if (isCorrect) MaterialTheme.colorScheme.onPrimaryContainer else MaterialTheme.colorScheme.onErrorContainer
+                    )
+                    Spacer(Modifier.height(6.dp))
+                    SmallHexagramCanvas(
+                        hexagram = selectedHexagram ?: question,
+                        modifier = Modifier.width(80.dp)
+                    )
+                }
+
+                Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                    Text(
+                        text = "正确答案",
+                        style = MaterialTheme.typography.labelMedium,
+                        color = if (isCorrect) MaterialTheme.colorScheme.onPrimaryContainer else MaterialTheme.colorScheme.onErrorContainer
+                    )
+                    Spacer(Modifier.height(6.dp))
+                    SmallHexagramCanvas(
+                        hexagram = question,
+                        modifier = Modifier.width(80.dp)
+                    )
+                }
+            }
 
             // 继续按钮
             Button(

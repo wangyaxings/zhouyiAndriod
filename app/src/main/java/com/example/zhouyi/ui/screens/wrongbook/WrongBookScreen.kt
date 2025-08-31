@@ -14,6 +14,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.zhouyi.data.model.Hexagram
 import com.example.zhouyi.ui.components.HexagramCanvas
+import com.example.zhouyi.ui.components.SmallHexagramCanvas
 
 /**
  * 错题本页面
@@ -245,9 +246,9 @@ private fun WrongBookItemCard(
             verticalAlignment = Alignment.CenterVertically
         ) {
             // 卦象显示
-            HexagramCanvas(
+            SmallHexagramCanvas(
                 hexagram = item.hexagram,
-                modifier = Modifier.size(60.dp)
+                modifier = Modifier.width(60.dp)
             )
 
             Spacer(modifier = Modifier.width(16.dp))

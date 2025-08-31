@@ -5,16 +5,16 @@ import kotlin.random.Random
 
 /**
  * 选项生成器
- * 实现5选1选项生成算法，包含干扰项策略
+ * 实现4选1选项生成算法，包含干扰项策略
  */
 class OptionGenerator {
 
     private val recentDistractors = mutableListOf<Int>() // 最近5题的干扰项
     private val maxRecentDistractors = 5
-    private var correctPositionPointer = 0 // A-E位置循环指针，确保位置均衡
+    private var correctPositionPointer = 0 // A-D 位置循环指针，确保位置均衡
 
     companion object {
-        const val OPTION_COUNT = 5
+        const val OPTION_COUNT = 4
         const val CORRECT_OPTION_INDEX = 0 // 正确答案在选项中的索引
         const val MAX_SAME_UPPER_DISTRACTORS = 2 // 同上卦最多干扰项数量
         const val MAX_SAME_LOWER_DISTRACTORS = 1 // 同下卦最多干扰项数量
@@ -46,11 +46,11 @@ class OptionGenerator {
     }
 
     /**
-     * 生成干扰项
+     * 生成干扰项（总计3个，配合1个正确项=4个选项）
      * 策略：
      * 1. 同上卦优先抽2个
      * 2. 同下卦优先抽1个
-     * 3. 其余随机1个
+     * 3. 若不足3个，则从全局补齐
      * 4. 与最近5题避免重复干扰项
      */
     private fun generateDistractors(
@@ -86,21 +86,8 @@ class OptionGenerator {
             usedIds.add(lowerDistractor.id)
         }
 
-        // 3. 从全局剩余中取1个
-        val remainingHexagrams = allHexagrams.filter {
-            it.id != correctHexagram.id &&
-            it.id !in usedIds &&
-            it.id !in recentDistractors
-        }
-
-        if (remainingHexagrams.isNotEmpty()) {
-            val globalDistractor = remainingHexagrams.random()
-            distractors.add(globalDistractor)
-            usedIds.add(globalDistractor.id)
-        }
-
-        // 4. 如果还不够4个干扰项，从全局补齐（包括最近使用过的）
-        while (distractors.size < 4) {
+        // 3. 若不足3个，从全局补齐
+        while (distractors.size < 3) {
             val remaining = allHexagrams.filter {
                 it.id != correctHexagram.id && it.id !in usedIds
             }
@@ -117,7 +104,7 @@ class OptionGenerator {
         // 更新最近使用的干扰项
         updateRecentDistractors(distractors.map { it.id })
 
-        return distractors.take(4) // 确保只返回4个干扰项
+        return distractors.take(3) // 确保只返回3个干扰项
     }
 
     /**
@@ -143,7 +130,7 @@ class OptionGenerator {
     }
 
     /**
-     * 获取选项标签（A-E）
+     * 获取选项标签（A-D）
      */
     fun getOptionLabel(index: Int): String {
         return ('A' + index).toString()
@@ -213,13 +200,23 @@ class OptionGenerator {
         correctHexagram: Hexagram,
         allHexagrams: List<Hexagram>
     ): OptionsWithPosition {
-        val options = generateOptions(correctHexagram, allHexagrams)
-        val correctPosition = getCorrectOptionPosition()
+        val options = generateOptions(correctHexagram, allHexagrams).toMutableList()
+
+        // 目标位置（用于均衡A-E分布）
+        val targetPosition = getCorrectOptionPosition()
+
+        // 确保正确答案出现在目标位置
+        val currentIndex = options.indexOfFirst { it.id == correctHexagram.id }
+        if (currentIndex != -1 && currentIndex != targetPosition && targetPosition in 0 until OPTION_COUNT && options.size >= OPTION_COUNT) {
+            val tmp = options[targetPosition]
+            options[targetPosition] = options[currentIndex]
+            options[currentIndex] = tmp
+        }
 
         return OptionsWithPosition(
             options = options,
-            correctPosition = correctPosition,
-            correctPositionLabel = getOptionLabel(correctPosition)
+            correctPosition = targetPosition,
+            correctPositionLabel = getOptionLabel(targetPosition)
         )
     }
 
