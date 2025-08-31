@@ -1,0 +1,642 @@
+[
+  {
+    "id": 1,
+    "nameZh": "乾为天",
+    "upperTrigram": "乾",
+    "lowerTrigram": "乾",
+    "upperElement": "天",
+    "lowerElement": "天",
+    "kingWenIndex": 1,
+    "linesBits": "111111"
+  },
+  {
+    "id": 2,
+    "nameZh": "坤为地",
+    "upperTrigram": "坤",
+    "lowerTrigram": "坤",
+    "upperElement": "地",
+    "lowerElement": "地",
+    "kingWenIndex": 2,
+    "linesBits": "000000"
+  },
+  {
+    "id": 3,
+    "nameZh": "水雷屯",
+    "upperTrigram": "坎",
+    "lowerTrigram": "震",
+    "upperElement": "水",
+    "lowerElement": "雷",
+    "kingWenIndex": 3,
+    "linesBits": "010001"
+  },
+  {
+    "id": 4,
+    "nameZh": "山水蒙",
+    "upperTrigram": "艮",
+    "lowerTrigram": "坎",
+    "upperElement": "山",
+    "lowerElement": "水",
+    "kingWenIndex": 4,
+    "linesBits": "100010"
+  },
+  {
+    "id": 5,
+    "nameZh": "水天需",
+    "upperTrigram": "坎",
+    "lowerTrigram": "乾",
+    "upperElement": "水",
+    "lowerElement": "天",
+    "kingWenIndex": 5,
+    "linesBits": "010111"
+  },
+  {
+    "id": 6,
+    "nameZh": "天水讼",
+    "upperTrigram": "乾",
+    "lowerTrigram": "坎",
+    "upperElement": "天",
+    "lowerElement": "水",
+    "kingWenIndex": 6,
+    "linesBits": "111010"
+  },
+  {
+    "id": 7,
+    "nameZh": "地水师",
+    "upperTrigram": "坤",
+    "lowerTrigram": "坎",
+    "upperElement": "地",
+    "lowerElement": "水",
+    "kingWenIndex": 7,
+    "linesBits": "000010"
+  },
+  {
+    "id": 8,
+    "nameZh": "水地比",
+    "upperTrigram": "坎",
+    "lowerTrigram": "坤",
+    "upperElement": "水",
+    "lowerElement": "地",
+    "kingWenIndex": 8,
+    "linesBits": "010000"
+  },
+  {
+    "id": 9,
+    "nameZh": "风天小畜",
+    "upperTrigram": "巽",
+    "lowerTrigram": "乾",
+    "upperElement": "风",
+    "lowerElement": "天",
+    "kingWenIndex": 9,
+    "linesBits": "011111"
+  },
+  {
+    "id": 10,
+    "nameZh": "天泽履",
+    "upperTrigram": "乾",
+    "lowerTrigram": "兑",
+    "upperElement": "天",
+    "lowerElement": "泽",
+    "kingWenIndex": 10,
+    "linesBits": "111110"
+  },
+  {
+    "id": 11,
+    "nameZh": "地天泰",
+    "upperTrigram": "坤",
+    "lowerTrigram": "乾",
+    "upperElement": "地",
+    "lowerElement": "天",
+    "kingWenIndex": 11,
+    "linesBits": "000111"
+  },
+  {
+    "id": 12,
+    "nameZh": "天地否",
+    "upperTrigram": "乾",
+    "lowerTrigram": "坤",
+    "upperElement": "天",
+    "lowerElement": "地",
+    "kingWenIndex": 12,
+    "linesBits": "111000"
+  },
+  {
+    "id": 13,
+    "nameZh": "天火同人",
+    "upperTrigram": "乾",
+    "lowerTrigram": "离",
+    "upperElement": "天",
+    "lowerElement": "火",
+    "kingWenIndex": 13,
+    "linesBits": "111101"
+  },
+  {
+    "id": 14,
+    "nameZh": "火天大有",
+    "upperTrigram": "离",
+    "lowerTrigram": "乾",
+    "upperElement": "火",
+    "lowerElement": "天",
+    "kingWenIndex": 14,
+    "linesBits": "101111"
+  },
+  {
+    "id": 15,
+    "nameZh": "地山谦",
+    "upperTrigram": "坤",
+    "lowerTrigram": "艮",
+    "upperElement": "地",
+    "lowerElement": "山",
+    "kingWenIndex": 15,
+    "linesBits": "000100"
+  },
+  {
+    "id": 16,
+    "nameZh": "雷地豫",
+    "upperTrigram": "震",
+    "lowerTrigram": "坤",
+    "upperElement": "雷",
+    "lowerElement": "地",
+    "kingWenIndex": 16,
+    "linesBits": "001000"
+  },
+  {
+    "id": 17,
+    "nameZh": "泽雷随",
+    "upperTrigram": "兑",
+    "lowerTrigram": "震",
+    "upperElement": "泽",
+    "lowerElement": "雷",
+    "kingWenIndex": 17,
+    "linesBits": "110001"
+  },
+  {
+    "id": 18,
+    "nameZh": "山风蛊",
+    "upperTrigram": "艮",
+    "lowerTrigram": "巽",
+    "upperElement": "山",
+    "lowerElement": "风",
+    "kingWenIndex": 18,
+    "linesBits": "100011"
+  },
+  {
+    "id": 19,
+    "nameZh": "地泽临",
+    "upperTrigram": "坤",
+    "lowerTrigram": "兑",
+    "upperElement": "地",
+    "lowerElement": "泽",
+    "kingWenIndex": 19,
+    "linesBits": "000110"
+  },
+  {
+    "id": 20,
+    "nameZh": "风地观",
+    "upperTrigram": "巽",
+    "lowerTrigram": "坤",
+    "upperElement": "风",
+    "lowerElement": "地",
+    "kingWenIndex": 20,
+    "linesBits": "011000"
+  },
+  {
+    "id": 21,
+    "nameZh": "火雷噬嗑",
+    "upperTrigram": "离",
+    "lowerTrigram": "震",
+    "upperElement": "火",
+    "lowerElement": "雷",
+    "kingWenIndex": 21,
+    "linesBits": "101001"
+  },
+  {
+    "id": 22,
+    "nameZh": "山火贲",
+    "upperTrigram": "艮",
+    "lowerTrigram": "离",
+    "upperElement": "山",
+    "lowerElement": "火",
+    "kingWenIndex": 22,
+    "linesBits": "100101"
+  },
+  {
+    "id": 23,
+    "nameZh": "山地剥",
+    "upperTrigram": "艮",
+    "lowerTrigram": "坤",
+    "upperElement": "山",
+    "lowerElement": "地",
+    "kingWenIndex": 23,
+    "linesBits": "100000"
+  },
+  {
+    "id": 24,
+    "nameZh": "地雷复",
+    "upperTrigram": "坤",
+    "lowerTrigram": "震",
+    "upperElement": "地",
+    "lowerElement": "雷",
+    "kingWenIndex": 24,
+    "linesBits": "000001"
+  },
+  {
+    "id": 25,
+    "nameZh": "天雷无妄",
+    "upperTrigram": "乾",
+    "lowerTrigram": "震",
+    "upperElement": "天",
+    "lowerElement": "雷",
+    "kingWenIndex": 25,
+    "linesBits": "111001"
+  },
+  {
+    "id": 26,
+    "nameZh": "山天大畜",
+    "upperTrigram": "艮",
+    "lowerTrigram": "乾",
+    "upperElement": "山",
+    "lowerElement": "天",
+    "kingWenIndex": 26,
+    "linesBits": "100111"
+  },
+  {
+    "id": 27,
+    "nameZh": "山雷颐",
+    "upperTrigram": "艮",
+    "lowerTrigram": "震",
+    "upperElement": "山",
+    "lowerElement": "雷",
+    "kingWenIndex": 27,
+    "linesBits": "100001"
+  },
+  {
+    "id": 28,
+    "nameZh": "泽风大过",
+    "upperTrigram": "兑",
+    "lowerTrigram": "巽",
+    "upperElement": "泽",
+    "lowerElement": "风",
+    "kingWenIndex": 28,
+    "linesBits": "110011"
+  },
+  {
+    "id": 29,
+    "nameZh": "坎为水",
+    "upperTrigram": "坎",
+    "lowerTrigram": "坎",
+    "upperElement": "水",
+    "lowerElement": "水",
+    "kingWenIndex": 29,
+    "linesBits": "010010"
+  },
+  {
+    "id": 30,
+    "nameZh": "离为火",
+    "upperTrigram": "离",
+    "lowerTrigram": "离",
+    "upperElement": "火",
+    "lowerElement": "火",
+    "kingWenIndex": 30,
+    "linesBits": "101101"
+  },
+  {
+    "id": 31,
+    "nameZh": "泽山咸",
+    "upperTrigram": "兑",
+    "lowerTrigram": "艮",
+    "upperElement": "泽",
+    "lowerElement": "山",
+    "kingWenIndex": 31,
+    "linesBits": "110100"
+  },
+  {
+    "id": 32,
+    "nameZh": "雷风恒",
+    "upperTrigram": "震",
+    "lowerTrigram": "巽",
+    "upperElement": "雷",
+    "lowerElement": "风",
+    "kingWenIndex": 32,
+    "linesBits": "001011"
+  },
+  {
+    "id": 33,
+    "nameZh": "天山遁",
+    "upperTrigram": "乾",
+    "lowerTrigram": "艮",
+    "upperElement": "天",
+    "lowerElement": "山",
+    "kingWenIndex": 33,
+    "linesBits": "111100"
+  },
+  {
+    "id": 34,
+    "nameZh": "雷天大壮",
+    "upperTrigram": "震",
+    "lowerTrigram": "乾",
+    "upperElement": "雷",
+    "lowerElement": "天",
+    "kingWenIndex": 34,
+    "linesBits": "001111"
+  },
+  {
+    "id": 35,
+    "nameZh": "火地晋",
+    "upperTrigram": "离",
+    "lowerTrigram": "坤",
+    "upperElement": "火",
+    "lowerElement": "地",
+    "kingWenIndex": 35,
+    "linesBits": "101000"
+  },
+  {
+    "id": 36,
+    "nameZh": "地火明夷",
+    "upperTrigram": "坤",
+    "lowerTrigram": "离",
+    "upperElement": "地",
+    "lowerElement": "火",
+    "kingWenIndex": 36,
+    "linesBits": "000101"
+  },
+  {
+    "id": 37,
+    "nameZh": "风火家人",
+    "upperTrigram": "巽",
+    "lowerTrigram": "离",
+    "upperElement": "风",
+    "lowerElement": "火",
+    "kingWenIndex": 37,
+    "linesBits": "011101"
+  },
+  {
+    "id": 38,
+    "nameZh": "火泽睽",
+    "upperTrigram": "离",
+    "lowerTrigram": "兑",
+    "upperElement": "火",
+    "lowerElement": "泽",
+    "kingWenIndex": 38,
+    "linesBits": "101110"
+  },
+  {
+    "id": 39,
+    "nameZh": "水山蹇",
+    "upperTrigram": "坎",
+    "lowerTrigram": "艮",
+    "upperElement": "水",
+    "lowerElement": "山",
+    "kingWenIndex": 39,
+    "linesBits": "010100"
+  },
+  {
+    "id": 40,
+    "nameZh": "雷水解",
+    "upperTrigram": "震",
+    "lowerTrigram": "坎",
+    "upperElement": "雷",
+    "lowerElement": "水",
+    "kingWenIndex": 40,
+    "linesBits": "001010"
+  },
+  {
+    "id": 41,
+    "nameZh": "山泽损",
+    "upperTrigram": "艮",
+    "lowerTrigram": "兑",
+    "upperElement": "山",
+    "lowerElement": "泽",
+    "kingWenIndex": 41,
+    "linesBits": "100110"
+  },
+  {
+    "id": 42,
+    "nameZh": "风雷益",
+    "upperTrigram": "巽",
+    "lowerTrigram": "震",
+    "upperElement": "风",
+    "lowerElement": "雷",
+    "kingWenIndex": 42,
+    "linesBits": "011001"
+  },
+  {
+    "id": 43,
+    "nameZh": "泽天夬",
+    "upperTrigram": "兑",
+    "lowerTrigram": "乾",
+    "upperElement": "泽",
+    "lowerElement": "天",
+    "kingWenIndex": 43,
+    "linesBits": "110111"
+  },
+  {
+    "id": 44,
+    "nameZh": "天风姤",
+    "upperTrigram": "乾",
+    "lowerTrigram": "巽",
+    "upperElement": "天",
+    "lowerElement": "风",
+    "kingWenIndex": 44,
+    "linesBits": "111011"
+  },
+  {
+    "id": 45,
+    "nameZh": "泽地萃",
+    "upperTrigram": "兑",
+    "lowerTrigram": "坤",
+    "upperElement": "泽",
+    "lowerElement": "地",
+    "kingWenIndex": 45,
+    "linesBits": "110000"
+  },
+  {
+    "id": 46,
+    "nameZh": "地风升",
+    "upperTrigram": "坤",
+    "lowerTrigram": "巽",
+    "upperElement": "地",
+    "lowerElement": "风",
+    "kingWenIndex": 46,
+    "linesBits": "000011"
+  },
+  {
+    "id": 47,
+    "nameZh": "泽水困",
+    "upperTrigram": "兑",
+    "lowerTrigram": "坎",
+    "upperElement": "泽",
+    "lowerElement": "水",
+    "kingWenIndex": 47,
+    "linesBits": "110010"
+  },
+  {
+    "id": 48,
+    "nameZh": "水风井",
+    "upperTrigram": "坎",
+    "lowerTrigram": "巽",
+    "upperElement": "水",
+    "lowerElement": "风",
+    "kingWenIndex": 48,
+    "linesBits": "010011"
+  },
+  {
+    "id": 49,
+    "nameZh": "泽火革",
+    "upperTrigram": "兑",
+    "lowerTrigram": "离",
+    "upperElement": "泽",
+    "lowerElement": "火",
+    "kingWenIndex": 49,
+    "linesBits": "110101"
+  },
+  {
+    "id": 50,
+    "nameZh": "火风鼎",
+    "upperTrigram": "离",
+    "lowerTrigram": "巽",
+    "upperElement": "火",
+    "lowerElement": "风",
+    "kingWenIndex": 50,
+    "linesBits": "101011"
+  },
+  {
+    "id": 51,
+    "nameZh": "震为雷",
+    "upperTrigram": "震",
+    "lowerTrigram": "震",
+    "upperElement": "雷",
+    "lowerElement": "雷",
+    "kingWenIndex": 51,
+    "linesBits": "001001"
+  },
+  {
+    "id": 52,
+    "nameZh": "艮为山",
+    "upperTrigram": "艮",
+    "lowerTrigram": "艮",
+    "upperElement": "山",
+    "lowerElement": "山",
+    "kingWenIndex": 52,
+    "linesBits": "100100"
+  },
+  {
+    "id": 53,
+    "nameZh": "风山渐",
+    "upperTrigram": "巽",
+    "lowerTrigram": "艮",
+    "upperElement": "风",
+    "lowerElement": "山",
+    "kingWenIndex": 53,
+    "linesBits": "011100"
+  },
+  {
+    "id": 54,
+    "nameZh": "雷泽归妹",
+    "upperTrigram": "震",
+    "lowerTrigram": "兑",
+    "upperElement": "雷",
+    "lowerElement": "泽",
+    "kingWenIndex": 54,
+    "linesBits": "001110"
+  },
+  {
+    "id": 55,
+    "nameZh": "雷火丰",
+    "upperTrigram": "震",
+    "lowerTrigram": "离",
+    "upperElement": "雷",
+    "lowerElement": "火",
+    "kingWenIndex": 55,
+    "linesBits": "001101"
+  },
+  {
+    "id": 56,
+    "nameZh": "火山旅",
+    "upperTrigram": "离",
+    "lowerTrigram": "艮",
+    "upperElement": "火",
+    "lowerElement": "山",
+    "kingWenIndex": 56,
+    "linesBits": "101100"
+  },
+  {
+    "id": 57,
+    "nameZh": "巽为风",
+    "upperTrigram": "巽",
+    "lowerTrigram": "巽",
+    "upperElement": "风",
+    "lowerElement": "风",
+    "kingWenIndex": 57,
+    "linesBits": "011011"
+  },
+  {
+    "id": 58,
+    "nameZh": "兑为泽",
+    "upperTrigram": "兑",
+    "lowerTrigram": "兑",
+    "upperElement": "泽",
+    "lowerElement": "泽",
+    "kingWenIndex": 58,
+    "linesBits": "110110"
+  },
+  {
+    "id": 59,
+    "nameZh": "风水涣",
+    "upperTrigram": "巽",
+    "lowerTrigram": "坎",
+    "upperElement": "风",
+    "lowerElement": "水",
+    "kingWenIndex": 59,
+    "linesBits": "011010"
+  },
+  {
+    "id": 60,
+    "nameZh": "水泽节",
+    "upperTrigram": "坎",
+    "lowerTrigram": "兑",
+    "upperElement": "水",
+    "lowerElement": "泽",
+    "kingWenIndex": 60,
+    "linesBits": "010110"
+  },
+  {
+    "id": 61,
+    "nameZh": "风泽中孚",
+    "upperTrigram": "巽",
+    "lowerTrigram": "兑",
+    "upperElement": "风",
+    "lowerElement": "泽",
+    "kingWenIndex": 61,
+    "linesBits": "011110"
+  },
+  {
+    "id": 62,
+    "nameZh": "雷山小过",
+    "upperTrigram": "震",
+    "lowerTrigram": "艮",
+    "upperElement": "雷",
+    "lowerElement": "山",
+    "kingWenIndex": 62,
+    "linesBits": "001100"
+  },
+  {
+    "id": 63,
+    "nameZh": "水火既济",
+    "upperTrigram": "坎",
+    "lowerTrigram": "离",
+    "upperElement": "水",
+    "lowerElement": "火",
+    "kingWenIndex": 63,
+    "linesBits": "010101"
+  },
+  {
+    "id": 64,
+    "nameZh": "火水未济",
+    "upperTrigram": "离",
+    "lowerTrigram": "坎",
+    "upperElement": "火",
+    "lowerElement": "水",
+    "kingWenIndex": 64,
+    "linesBits": "101010"
+  }
+]
