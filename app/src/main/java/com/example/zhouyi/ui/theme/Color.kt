@@ -3,7 +3,7 @@ package com.example.zhouyi.ui.theme
 import androidx.compose.ui.graphics.Color
 
 /**
- * 应用颜色配置（以“宣纸+墨色+金棕”气质为基调）
+ * 应用颜色配置（以"宣纸+墨色+金棕"气质为基调）
  * 优先保证内容可读性与低噪声对比度。
  */
 
@@ -33,3 +33,10 @@ val InfoBlue = Color(0xFF1E88E5)
 // 卦象绘制推荐颜色（可按需使用）
 val YangLineColor = Color(0xFF1B1B1B)
 val YinLineColor = Color(0xFF6B6B6B)
+
+// 新增专业颜色（参考ref.md方案）
+val InkBlack = Color(0xFF1C1B1F)           // 深墨色，用于卦画主体
+val InkGray = Color(0xFF49454F)            // 浅墨色，用于次要元素
+val PaperWhite = Color(0xFFFFFBFE)         // 宣纸白，背景色
+val AccentGold = Color(0xFFB8860B)         // 金色点缀，重要信息
+val ShadowGray = Color(0xFFE6E1E5)         // 阴影灰，卡片边框

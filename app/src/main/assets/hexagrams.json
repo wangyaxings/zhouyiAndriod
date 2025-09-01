@@ -27,7 +27,7 @@
     "upperElement": "水",
     "lowerElement": "雷",
     "kingWenIndex": 3,
-    "linesBits": "010001"
+    "linesBits": "100010"
   },
   {
     "id": 4,
@@ -37,7 +37,7 @@
     "upperElement": "山",
     "lowerElement": "水",
     "kingWenIndex": 4,
-    "linesBits": "100010"
+    "linesBits": "010001"
   },
   {
     "id": 5,
@@ -47,7 +47,7 @@
     "upperElement": "水",
     "lowerElement": "天",
     "kingWenIndex": 5,
-    "linesBits": "010111"
+    "linesBits": "111010"
   },
   {
     "id": 6,
@@ -57,7 +57,7 @@
     "upperElement": "天",
     "lowerElement": "水",
     "kingWenIndex": 6,
-    "linesBits": "111010"
+    "linesBits": "010111"
   },
   {
     "id": 7,
@@ -67,7 +67,7 @@
     "upperElement": "地",
     "lowerElement": "水",
     "kingWenIndex": 7,
-    "linesBits": "000010"
+    "linesBits": "010000"
   },
   {
     "id": 8,
@@ -77,7 +77,7 @@
     "upperElement": "水",
     "lowerElement": "地",
     "kingWenIndex": 8,
-    "linesBits": "010000"
+    "linesBits": "000010"
   },
   {
     "id": 9,
@@ -87,7 +87,7 @@
     "upperElement": "风",
     "lowerElement": "天",
     "kingWenIndex": 9,
-    "linesBits": "011111"
+    "linesBits": "111011"
   },
   {
     "id": 10,
@@ -97,7 +97,7 @@
     "upperElement": "天",
     "lowerElement": "泽",
     "kingWenIndex": 10,
-    "linesBits": "111110"
+    "linesBits": "110111"
   },
   {
     "id": 11,
@@ -107,7 +107,7 @@
     "upperElement": "地",
     "lowerElement": "天",
     "kingWenIndex": 11,
-    "linesBits": "000111"
+    "linesBits": "111000"
   },
   {
     "id": 12,
@@ -117,7 +117,7 @@
     "upperElement": "天",
     "lowerElement": "地",
     "kingWenIndex": 12,
-    "linesBits": "111000"
+    "linesBits": "000111"
   },
   {
     "id": 13,
@@ -127,7 +127,7 @@
     "upperElement": "天",
     "lowerElement": "火",
     "kingWenIndex": 13,
-    "linesBits": "111101"
+    "linesBits": "101111"
   },
   {
     "id": 14,
@@ -137,7 +137,7 @@
     "upperElement": "火",
     "lowerElement": "天",
     "kingWenIndex": 14,
-    "linesBits": "101111"
+    "linesBits": "111101"
   },
   {
     "id": 15,
@@ -147,7 +147,7 @@
     "upperElement": "地",
     "lowerElement": "山",
     "kingWenIndex": 15,
-    "linesBits": "000100"
+    "linesBits": "001000"
   },
   {
     "id": 16,
@@ -157,7 +157,7 @@
     "upperElement": "雷",
     "lowerElement": "地",
     "kingWenIndex": 16,
-    "linesBits": "001000"
+    "linesBits": "000100"
   },
   {
     "id": 17,
@@ -167,7 +167,7 @@
     "upperElement": "泽",
     "lowerElement": "雷",
     "kingWenIndex": 17,
-    "linesBits": "110001"
+    "linesBits": "100110"
   },
   {
     "id": 18,
@@ -177,7 +177,7 @@
     "upperElement": "山",
     "lowerElement": "风",
     "kingWenIndex": 18,
-    "linesBits": "100011"
+    "linesBits": "011001"
   },
   {
     "id": 19,
@@ -187,7 +187,7 @@
     "upperElement": "地",
     "lowerElement": "泽",
     "kingWenIndex": 19,
-    "linesBits": "000110"
+    "linesBits": "110000"
   },
   {
     "id": 20,
@@ -197,7 +197,7 @@
     "upperElement": "风",
     "lowerElement": "地",
     "kingWenIndex": 20,
-    "linesBits": "011000"
+    "linesBits": "000011"
   },
   {
     "id": 21,
@@ -207,7 +207,7 @@
     "upperElement": "火",
     "lowerElement": "雷",
     "kingWenIndex": 21,
-    "linesBits": "101001"
+    "linesBits": "100101"
   },
   {
     "id": 22,
@@ -217,7 +217,7 @@
     "upperElement": "山",
     "lowerElement": "火",
     "kingWenIndex": 22,
-    "linesBits": "100101"
+    "linesBits": "101001"
   },
   {
     "id": 23,
@@ -227,7 +227,7 @@
     "upperElement": "山",
     "lowerElement": "地",
     "kingWenIndex": 23,
-    "linesBits": "100000"
+    "linesBits": "000001"
   },
   {
     "id": 24,
@@ -237,7 +237,7 @@
     "upperElement": "地",
     "lowerElement": "雷",
     "kingWenIndex": 24,
-    "linesBits": "000001"
+    "linesBits": "100000"
   },
   {
     "id": 25,
@@ -247,7 +247,7 @@
     "upperElement": "天",
     "lowerElement": "雷",
     "kingWenIndex": 25,
-    "linesBits": "111001"
+    "linesBits": "100111"
   },
   {
     "id": 26,
@@ -257,7 +257,7 @@
     "upperElement": "山",
     "lowerElement": "天",
     "kingWenIndex": 26,
-    "linesBits": "100111"
+    "linesBits": "111001"
   },
   {
     "id": 27,
@@ -277,7 +277,7 @@
     "upperElement": "泽",
     "lowerElement": "风",
     "kingWenIndex": 28,
-    "linesBits": "110011"
+    "linesBits": "011110"
   },
   {
     "id": 29,
@@ -307,7 +307,7 @@
     "upperElement": "泽",
     "lowerElement": "山",
     "kingWenIndex": 31,
-    "linesBits": "110100"
+    "linesBits": "001110"
   },
   {
     "id": 32,
@@ -317,7 +317,7 @@
     "upperElement": "雷",
     "lowerElement": "风",
     "kingWenIndex": 32,
-    "linesBits": "001011"
+    "linesBits": "011100"
   },
   {
     "id": 33,
@@ -327,7 +327,7 @@
     "upperElement": "天",
     "lowerElement": "山",
     "kingWenIndex": 33,
-    "linesBits": "111100"
+    "linesBits": "001111"
   },
   {
     "id": 34,
@@ -337,7 +337,7 @@
     "upperElement": "雷",
     "lowerElement": "天",
     "kingWenIndex": 34,
-    "linesBits": "001111"
+    "linesBits": "111100"
   },
   {
     "id": 35,
@@ -367,7 +367,7 @@
     "upperElement": "风",
     "lowerElement": "火",
     "kingWenIndex": 37,
-    "linesBits": "011101"
+    "linesBits": "101011"
   },
   {
     "id": 38,
@@ -377,7 +377,7 @@
     "upperElement": "火",
     "lowerElement": "泽",
     "kingWenIndex": 38,
-    "linesBits": "101110"
+    "linesBits": "110101"
   },
   {
     "id": 39,
@@ -387,7 +387,7 @@
     "upperElement": "水",
     "lowerElement": "山",
     "kingWenIndex": 39,
-    "linesBits": "010100"
+    "linesBits": "001010"
   },
   {
     "id": 40,
@@ -397,7 +397,7 @@
     "upperElement": "雷",
     "lowerElement": "水",
     "kingWenIndex": 40,
-    "linesBits": "001010"
+    "linesBits": "010100"
   },
   {
     "id": 41,
@@ -407,7 +407,7 @@
     "upperElement": "山",
     "lowerElement": "泽",
     "kingWenIndex": 41,
-    "linesBits": "100110"
+    "linesBits": "110001"
   },
   {
     "id": 42,
@@ -417,7 +417,7 @@
     "upperElement": "风",
     "lowerElement": "雷",
     "kingWenIndex": 42,
-    "linesBits": "011001"
+    "linesBits": "100011"
   },
   {
     "id": 43,
@@ -427,7 +427,7 @@
     "upperElement": "泽",
     "lowerElement": "天",
     "kingWenIndex": 43,
-    "linesBits": "110111"
+    "linesBits": "111110"
   },
   {
     "id": 44,
@@ -437,7 +437,7 @@
     "upperElement": "天",
     "lowerElement": "风",
     "kingWenIndex": 44,
-    "linesBits": "111011"
+    "linesBits": "011111"
   },
   {
     "id": 45,
@@ -447,7 +447,7 @@
     "upperElement": "泽",
     "lowerElement": "地",
     "kingWenIndex": 45,
-    "linesBits": "110000"
+    "linesBits": "000110"
   },
   {
     "id": 46,
@@ -457,7 +457,7 @@
     "upperElement": "地",
     "lowerElement": "风",
     "kingWenIndex": 46,
-    "linesBits": "000011"
+    "linesBits": "011000"
   },
   {
     "id": 47,
@@ -467,7 +467,7 @@
     "upperElement": "泽",
     "lowerElement": "水",
     "kingWenIndex": 47,
-    "linesBits": "110010"
+    "linesBits": "010110"
   },
   {
     "id": 48,
@@ -477,7 +477,7 @@
     "upperElement": "水",
     "lowerElement": "风",
     "kingWenIndex": 48,
-    "linesBits": "010011"
+    "linesBits": "011010"
   },
   {
     "id": 49,
@@ -487,7 +487,7 @@
     "upperElement": "泽",
     "lowerElement": "火",
     "kingWenIndex": 49,
-    "linesBits": "110101"
+    "linesBits": "101110"
   },
   {
     "id": 50,
@@ -497,7 +497,7 @@
     "upperElement": "火",
     "lowerElement": "风",
     "kingWenIndex": 50,
-    "linesBits": "101011"
+    "linesBits": "011101"
   },
   {
     "id": 51,
@@ -507,7 +507,7 @@
     "upperElement": "雷",
     "lowerElement": "雷",
     "kingWenIndex": 51,
-    "linesBits": "001001"
+    "linesBits": "100100"
   },
   {
     "id": 52,
@@ -517,7 +517,7 @@
     "upperElement": "山",
     "lowerElement": "山",
     "kingWenIndex": 52,
-    "linesBits": "100100"
+    "linesBits": "001001"
   },
   {
     "id": 53,
@@ -527,7 +527,7 @@
     "upperElement": "风",
     "lowerElement": "山",
     "kingWenIndex": 53,
-    "linesBits": "011100"
+    "linesBits": "001011"
   },
   {
     "id": 54,
@@ -537,7 +537,7 @@
     "upperElement": "雷",
     "lowerElement": "泽",
     "kingWenIndex": 54,
-    "linesBits": "001110"
+    "linesBits": "110100"
   },
   {
     "id": 55,
@@ -547,7 +547,7 @@
     "upperElement": "雷",
     "lowerElement": "火",
     "kingWenIndex": 55,
-    "linesBits": "001101"
+    "linesBits": "101100"
   },
   {
     "id": 56,
@@ -557,7 +557,7 @@
     "upperElement": "火",
     "lowerElement": "山",
     "kingWenIndex": 56,
-    "linesBits": "101100"
+    "linesBits": "001101"
   },
   {
     "id": 57,
@@ -587,7 +587,7 @@
     "upperElement": "风",
     "lowerElement": "水",
     "kingWenIndex": 59,
-    "linesBits": "011010"
+    "linesBits": "010011"
   },
   {
     "id": 60,
@@ -597,7 +597,7 @@
     "upperElement": "水",
     "lowerElement": "泽",
     "kingWenIndex": 60,
-    "linesBits": "010110"
+    "linesBits": "110010"
   },
   {
     "id": 61,
@@ -607,7 +607,7 @@
     "upperElement": "风",
     "lowerElement": "泽",
     "kingWenIndex": 61,
-    "linesBits": "011110"
+    "linesBits": "110011"
   },
   {
     "id": 62,
@@ -627,7 +627,7 @@
     "upperElement": "水",
     "lowerElement": "火",
     "kingWenIndex": 63,
-    "linesBits": "010101"
+    "linesBits": "101010"
   },
   {
     "id": 64,
@@ -637,6 +637,6 @@
     "upperElement": "火",
     "lowerElement": "水",
     "kingWenIndex": 64,
-    "linesBits": "101010"
+    "linesBits": "010101"
   }
 ]
