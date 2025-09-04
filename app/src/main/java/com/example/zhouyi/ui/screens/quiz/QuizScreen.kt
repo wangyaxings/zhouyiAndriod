@@ -17,6 +17,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.zhouyi.data.model.Hexagram
 import com.example.zhouyi.ui.components.HexagramCanvas
 import com.example.zhouyi.ui.components.SmallHexagramCanvas
+import com.example.zhouyi.ui.components.HexagramSequenceSongView
 
 /**
  * 练习页面
@@ -88,18 +89,19 @@ fun QuizScreen(
                     .padding(bottom = 24.dp)
             )
 
-            // 卦象显示区域
+            // 卦象显示区域（包含卦序歌）
             AnimatedVisibility(
                 visible = uiState.currentQuestion != null,
                 enter = fadeIn() + expandVertically(),
                 exit = fadeOut() + shrinkVertically()
             ) {
                 uiState.currentQuestion?.let { question ->
-                    QuestionDisplay(
+                    QuestionDisplayWithSong(
                         question = question,
+                        showAnswer = uiState.showingResult,
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(bottom = 32.dp)
+                            .padding(bottom = 16.dp)
                     )
                 }
             }
@@ -157,11 +159,12 @@ fun QuizScreen(
 }
 
 /**
- * 题目显示区域
+ * 题目显示区域（包含卦序歌）
  */
 @Composable
-private fun QuestionDisplay(
+private fun QuestionDisplayWithSong(
     question: Hexagram,
+    showAnswer: Boolean,
     modifier: Modifier = Modifier
 ) {
     Card(
@@ -170,32 +173,46 @@ private fun QuestionDisplay(
             containerColor = MaterialTheme.colorScheme.surface
         )
     ) {
-        Column(
-            modifier = Modifier.padding(24.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
+        Row(
+            modifier = Modifier.padding(16.dp),
+            horizontalArrangement = Arrangement.spacedBy(16.dp),
+            verticalAlignment = Alignment.CenterVertically
         ) {
-            Text(
-                text = "请选择这个卦象的名称",
-                style = MaterialTheme.typography.titleMedium,
-                textAlign = TextAlign.Center,
-                modifier = Modifier.padding(bottom = 16.dp)
-            )
-
-            // 卦象绘制（轻微淡入+上移动效，按题目ID切换）
-            AnimatedContent(
-                targetState = question.id,
-                transitionSpec = {
-                    (fadeIn(tween(220)) + slideInVertically { it / 8 }) togetherWith
-                        (fadeOut(tween(180)) + slideOutVertically { -it / 12 })
-                }, label = "hexagram-transition"
+            // 卦象显示在左侧
+            Column(
+                modifier = Modifier.weight(1f),
+                horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                HexagramCanvas(
-                    hexagram = question,
-                    modifier = Modifier
-                        .width(120.dp)
-                        .padding(bottom = 8.dp)
+                Text(
+                    text = "请选择这个卦象的名称",
+                    style = MaterialTheme.typography.titleMedium,
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier.padding(bottom = 16.dp)
                 )
+
+                // 卦象绘制（轻微淡入+上移动效，按题目ID切换）
+                AnimatedContent(
+                    targetState = question.id,
+                    transitionSpec = {
+                        (fadeIn(tween(220)) + slideInVertically { it / 8 }) togetherWith
+                            (fadeOut(tween(180)) + slideOutVertically { -it / 12 })
+                    }, label = "hexagram-transition"
+                ) {
+                    HexagramCanvas(
+                        hexagram = question,
+                        modifier = Modifier
+                            .width(120.dp)
+                            .padding(bottom = 8.dp)
+                    )
+                }
             }
+
+            // 卦序歌显示在右侧
+            HexagramSequenceSongView(
+                currentHexagramId = question.id,
+                showAnswer = showAnswer,
+                modifier = Modifier.weight(1f)
+            )
         }
     }
 }
