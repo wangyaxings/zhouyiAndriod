@@ -8,6 +8,7 @@ import com.example.zhouyi.core.algorithm.SrsManager
 import com.example.zhouyi.data.model.Hexagram
 import com.example.zhouyi.data.preferences.AppPreferences
 import com.example.zhouyi.data.repository.AttemptRepository
+import com.example.zhouyi.data.repository.CheckInRepository
 import com.example.zhouyi.data.repository.HexagramRepository
 import com.example.zhouyi.data.repository.SrsRepository
 import com.example.zhouyi.data.repository.WrongBookRepository
@@ -24,6 +25,7 @@ class QuizViewModel(
     private val attemptRepository: AttemptRepository,
     private val wrongBookRepository: WrongBookRepository,
     private val srsRepository: SrsRepository,
+    private val checkInRepository: CheckInRepository,
     private val preferences: AppPreferences
 ) : ViewModel() {
 
@@ -160,7 +162,41 @@ class QuizViewModel(
      */
     fun nextQuestion() {
         currentQuestionIndex++
-        generateNextQuestion()
+
+        // 检查是否完成练习
+        if (currentQuestionIndex >= totalQuestions) {
+            // 练习完成，自动打卡
+            autoCheckIn()
+        } else {
+            generateNextQuestion()
+        }
+    }
+
+    /**
+     * 自动打卡
+     */
+    private fun autoCheckIn() {
+        viewModelScope.launch {
+            try {
+                // 计算本次练习的答题数量和正确数量
+                val questionCount = totalQuestions
+                val correctCount = correctCount
+
+                // 调用打卡
+                checkInRepository.checkIn(questionCount, correctCount)
+
+                // 更新UI状态为完成
+                _uiState.value = _uiState.value.copy(
+                    isQuizComplete = true
+                )
+            } catch (e: Exception) {
+                // 打卡失败，但不影响练习完成
+                e.printStackTrace()
+                _uiState.value = _uiState.value.copy(
+                    isQuizComplete = true
+                )
+            }
+        }
     }
 
     /**

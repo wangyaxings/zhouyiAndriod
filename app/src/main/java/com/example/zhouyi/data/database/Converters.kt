@@ -4,6 +4,8 @@ import androidx.room.TypeConverter
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.Types
 import com.squareup.moshi.adapters.Rfc3339DateJsonAdapter
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 import java.util.*
 
 /**
@@ -20,6 +22,8 @@ class Converters {
 
     private val intListAdapter = moshi.adapter<List<Int>>(intListType)
     private val stringListAdapter = moshi.adapter<List<String>>(stringListType)
+    
+    private val dateFormatter = DateTimeFormatter.ISO_LOCAL_DATE
 
     /**
      * 将Int列表转换为JSON字符串
@@ -67,5 +71,21 @@ class Converters {
     @TypeConverter
     fun dateToTimestamp(date: Date?): Long? {
         return date?.time
+    }
+
+    /**
+     * 将LocalDate转换为字符串
+     */
+    @TypeConverter
+    fun fromLocalDate(date: LocalDate?): String? {
+        return date?.format(dateFormatter)
+    }
+
+    /**
+     * 将字符串转换为LocalDate
+     */
+    @TypeConverter
+    fun toLocalDate(dateString: String?): LocalDate? {
+        return dateString?.let { LocalDate.parse(it, dateFormatter) }
     }
 }

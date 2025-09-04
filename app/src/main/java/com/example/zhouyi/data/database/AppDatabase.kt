@@ -16,9 +16,10 @@ import com.example.zhouyi.data.model.*
         Hexagram::class,
         Attempt::class,
         WrongBook::class,
-        SrsState::class
+        SrsState::class,
+        CheckInRecord::class
     ],
-    version = 1,
+    version = 2,
     exportSchema = false
 )
 @TypeConverters(Converters::class)
@@ -29,6 +30,7 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun attemptDao(): AttemptDao
     abstract fun wrongBookDao(): WrongBookDao
     abstract fun srsStateDao(): SrsStateDao
+    abstract fun checkInDao(): CheckInDao
 
     companion object {
         @Volatile

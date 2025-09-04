@@ -24,7 +24,8 @@ fun HomeScreen(
     onNavigateToQuiz: () -> Unit,
     onNavigateToWrongBook: () -> Unit,
     onNavigateToStatistics: () -> Unit,
-    onNavigateToSettings: () -> Unit
+    onNavigateToSettings: () -> Unit,
+    onNavigateToCheckIn: () -> Unit
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
@@ -79,6 +80,7 @@ fun HomeScreen(
                 onStartPractice = onNavigateToQuiz,
                 onWrongBook = onNavigateToWrongBook,
                 onStatistics = onNavigateToStatistics,
+                onCheckIn = onNavigateToCheckIn,
                 modifier = Modifier.fillMaxWidth()
             )
 
@@ -168,6 +170,7 @@ private fun MainActionButtons(
     onStartPractice: () -> Unit,
     onWrongBook: () -> Unit,
     onStatistics: () -> Unit,
+    onCheckIn: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     Column(
@@ -214,6 +217,19 @@ private fun MainActionButtons(
                 modifier = Modifier.padding(end = 8.dp)
             )
             Text("学习统计", style = MaterialTheme.typography.titleMedium)
+        }
+
+        // 打卡按钮
+        OutlinedButton(
+            onClick = onCheckIn,
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Icon(
+                Icons.Default.CalendarMonth,
+                contentDescription = null,
+                modifier = Modifier.padding(end = 8.dp)
+            )
+            Text("打卡日历", style = MaterialTheme.typography.titleMedium)
         }
     }
 }

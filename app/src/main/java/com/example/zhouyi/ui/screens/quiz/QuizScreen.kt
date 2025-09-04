@@ -26,9 +26,25 @@ import com.example.zhouyi.ui.components.SmallHexagramCanvas
 @Composable
 fun QuizScreen(
     viewModel: QuizViewModel,
-    onNavigateBack: () -> Unit
+    onNavigateBack: () -> Unit,
+    onNavigateToCalendar: () -> Unit
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+
+    // 显示打卡完成对话框
+    if (uiState.isQuizComplete) {
+        QuizCompletionDialog(
+            correctCount = uiState.correctCount,
+            totalQuestions = uiState.totalQuestions,
+            accuracy = uiState.accuracy,
+            onDismiss = {
+                viewModel.restartQuiz()
+            },
+            onViewCalendar = {
+                onNavigateToCalendar()
+            }
+        )
+    }
 
     LaunchedEffect(Unit) {
         viewModel.startQuiz()

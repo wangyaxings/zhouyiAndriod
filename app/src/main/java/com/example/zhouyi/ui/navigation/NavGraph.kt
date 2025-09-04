@@ -14,13 +14,16 @@ import com.example.zhouyi.ui.screens.quiz.QuizScreen
 import com.example.zhouyi.ui.screens.wrongbook.WrongBookScreen
 import com.example.zhouyi.ui.screens.statistics.StatisticsScreen
 import com.example.zhouyi.ui.screens.settings.SettingsScreen
+import com.example.zhouyi.ui.screens.checkin.CheckInScreen
 import com.example.zhouyi.ui.screens.home.HomeViewModel
 import com.example.zhouyi.ui.screens.quiz.QuizViewModel
 import com.example.zhouyi.ui.screens.wrongbook.WrongBookViewModel
 import com.example.zhouyi.ui.screens.statistics.StatisticsViewModel
 import com.example.zhouyi.ui.screens.settings.SettingsViewModel
+import com.example.zhouyi.ui.screens.checkin.CheckInViewModel
 import com.example.zhouyi.data.repository.*
 import com.example.zhouyi.data.preferences.AppPreferences
+import com.example.zhouyi.core.di.AppModule
 
 /**
  * 应用导航图
@@ -31,6 +34,8 @@ fun NavGraph(
     startDestination: String = Screen.Home.route
 ) {
     val context = LocalContext.current
+    val database = remember { AppModule.provideDatabase(context) }
+
     NavHost(
         navController = navController,
         startDestination = startDestination
@@ -38,10 +43,10 @@ fun NavGraph(
         composable(Screen.Home.route) {
             val vm = remember {
                 HomeViewModel(
-                    attemptRepository = AttemptRepository(context),
-                    wrongBookRepository = WrongBookRepository(context),
-                    srsRepository = SrsRepository(context),
-                    preferences = AppPreferences(context)
+                    attemptRepository = AppModule.provideAttemptRepository(context),
+                    wrongBookRepository = AppModule.provideWrongBookRepository(context),
+                    srsRepository = AppModule.provideSrsRepository(context),
+                    preferences = AppModule.provideAppPreferences(context)
                 )
             }
             HomeScreen(
@@ -49,7 +54,8 @@ fun NavGraph(
                 onNavigateToQuiz = { navController.navigate(Screen.Quiz.createRoute("practice")) },
                 onNavigateToWrongBook = { navController.navigate(Screen.WrongBook.route) },
                 onNavigateToStatistics = { navController.navigate(Screen.Statistics.route) },
-                onNavigateToSettings = { navController.navigate(Screen.Settings.route) }
+                onNavigateToSettings = { navController.navigate(Screen.Settings.route) },
+                onNavigateToCheckIn = { navController.navigate(Screen.CheckIn.route) }
             )
         }
 
@@ -59,24 +65,26 @@ fun NavGraph(
         ) {
             val vm = remember {
                 QuizViewModel(
-                    hexagramRepository = HexagramRepository(context),
-                    attemptRepository = AttemptRepository(context),
-                    wrongBookRepository = WrongBookRepository(context),
-                    srsRepository = SrsRepository(context),
-                    preferences = AppPreferences(context)
+                    hexagramRepository = AppModule.provideHexagramRepository(context),
+                    attemptRepository = AppModule.provideAttemptRepository(context),
+                    wrongBookRepository = AppModule.provideWrongBookRepository(context),
+                    srsRepository = AppModule.provideSrsRepository(context),
+                    checkInRepository = AppModule.provideCheckInRepository(database),
+                    preferences = AppModule.provideAppPreferences(context)
                 )
             }
             QuizScreen(
                 viewModel = vm,
-                onNavigateBack = { navController.popBackStack() }
+                onNavigateBack = { navController.popBackStack() },
+                onNavigateToCalendar = { navController.navigate(Screen.CheckIn.route) }
             )
         }
 
         composable(Screen.WrongBook.route) {
             val vm = remember {
                 WrongBookViewModel(
-                    wrongBookRepository = WrongBookRepository(context),
-                    hexagramRepository = HexagramRepository(context)
+                    wrongBookRepository = AppModule.provideWrongBookRepository(context),
+                    hexagramRepository = AppModule.provideHexagramRepository(context)
                 )
             }
             WrongBookScreen(
@@ -89,9 +97,9 @@ fun NavGraph(
         composable(Screen.Statistics.route) {
             val vm = remember {
                 StatisticsViewModel(
-                    attemptRepository = AttemptRepository(context),
-                    srsRepository = SrsRepository(context),
-                    wrongBookRepository = WrongBookRepository(context)
+                    attemptRepository = AppModule.provideAttemptRepository(context),
+                    srsRepository = AppModule.provideSrsRepository(context),
+                    wrongBookRepository = AppModule.provideWrongBookRepository(context)
                 )
             }
             StatisticsScreen(
@@ -103,6 +111,18 @@ fun NavGraph(
         composable(Screen.Settings.route) {
             val vm = remember { SettingsViewModel(application = (context.applicationContext as android.app.Application)) }
             SettingsScreen(
+                viewModel = vm,
+                onNavigateBack = { navController.popBackStack() }
+            )
+        }
+
+        composable(Screen.CheckIn.route) {
+            val vm = remember {
+                CheckInViewModel(
+                    checkInRepository = AppModule.provideCheckInRepository(database)
+                )
+            }
+            CheckInScreen(
                 viewModel = vm,
                 onNavigateBack = { navController.popBackStack() }
             )
@@ -128,4 +148,5 @@ sealed class Screen(val route: String) {
     object WrongBook : Screen("wrongbook")
     object Statistics : Screen("statistics")
     object Settings : Screen("settings")
+    object CheckIn : Screen("checkin")
 }
